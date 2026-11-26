@@ -3,1433 +3,1910 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Название вкладки в браузере и описание сайта -->
-  <title>toochka.fun — Проекты, код и эксперименты</title>
-  <meta name="description" content="Личный сайт-визитка toochka.fun: игры, веб-проекты, код и творчество в сети." />
+  <!-- Мета-данные сайта TOOCHKA -->
+  <title>TOOCHKA — Мы создаём полезные вещи</title>
+  <meta name="description" content="TOOCHKA (toochka.fun) — инди-студия. Делаем понятные, лёгкие и честные игры и проекты без лишнего шума. Скоро в RuStore: Мей-Мей кликер." />
+  <meta name="theme-color" content="#050505" />
 
-  <!-- Шрифт Inter для современного и чистого вида -->
+  <!-- Подключение шрифтов Google Fonts (пиксельные и моноширинные с поддержкой кириллицы) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet" />
 
   <!-- Подключение Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Настройка цветовой палитры и анимаций Tailwind -->
+  <!-- Конфигурация Tailwind под монохромный пиксельный минимализм -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            pixel: ['"Press Start 2P"', '"Silkscreen"', 'monospace'],
+            silk: ['"Silkscreen"', '"JetBrains Mono"', 'monospace'],
+            mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'monospace'],
           },
           colors: {
-            brand: {
-              bg: '#ffffff',
-              soft: '#f4f8ff',
-              blue: '#2563eb',
-              sky: '#0ea5e9',
-              ink: '#0f172a',
-            },
-          },
-          boxShadow: {
-            'soft-blue': '0 10px 40px -10px rgba(37, 99, 235, 0.16)',
-            'glow-blue': '0 14px 45px -10px rgba(14, 165, 233, 0.30)',
-            'glass': '0 8px 32px rgba(37, 99, 235, 0.08)',
-          },
-          keyframes: {
-            blob: {
-              '0%, 100%': { transform: 'translate(0px, 0px) scale(1)' },
-              '33%': { transform: 'translate(28px, -36px) scale(1.07)' },
-              '66%': { transform: 'translate(-22px, 24px) scale(0.95)' },
-            },
-            gradientFlow: {
-              '0%, 100%': { backgroundPosition: '0% 50%' },
-              '50%': { backgroundPosition: '100% 50%' },
-            },
-            blink: {
-              '0%, 49%': { opacity: '1' },
-              '50%, 100%': { opacity: '0' },
-            },
-            floatSlow: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-8px)' },
-            },
-            pulseRing: {
-              '0%': { transform: 'scale(0.9)', opacity: '0.8' },
-              '100%': { transform: 'scale(2.1)', opacity: '0' },
-            },
-          },
-          animation: {
-            'blob-1': 'blob 14s ease-in-out infinite',
-            'blob-2': 'blob 18s ease-in-out infinite reverse',
-            'blob-3': 'blob 22s ease-in-out infinite 2s',
-            'gradient-flow': 'gradientFlow 5s ease infinite',
-            'cursor-blink': 'blink 0.9s infinite',
-            'float-slow': 'floatSlow 5s ease-in-out infinite',
-            'pulse-ring': 'pulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite',
+            void: '#050505',
+            surface: '#0e0e0e',
+            panel: '#0a0a0a',
+            hairline: '#262626',
+            subtle: '#1a1a1a',
+            muted: '#888888',
           },
         },
       },
     };
   </script>
 
-  <!-- Вспомогательные стили для плавных переходов, 3D-эффекта карточек и эффектов стекла -->
+  <!-- Встроенные стили для строгих 0px границ, пунктиров, пиксельной чёткости и анимаций -->
   <style>
-    body {
-      background-color: #ffffff;
-      color: #0f172a;
+    :root {
+      color-scheme: dark;
+    }
+
+    /* Строгие 0px углы для всех HTML-элементов (SVG rx остаётся нетронутым для логотипов) */
+    *, *::before, *::after {
+      border-radius: 0px !important;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      background-color: #050505;
+      color: #ffffff;
       overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* Эффект матового стекла */
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.76);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(37, 99, 235, 0.12);
+    /* Ультралёгкая фоновая сетка и микротекстура сканлайнов без нагрузки на GPU */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 36px 36px;
     }
 
-    /* Переливающийся синий градиент для главного заголовка */
-    .text-shimmer {
-      background: linear-gradient(120deg, #1d4ed8, #2563eb, #0ea5e9, #38bdf8, #2563eb);
-      background-size: 220% 220%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.014) 0px,
+        rgba(255, 255, 255, 0.014) 1px,
+        transparent 1px,
+        transparent 3px
+      );
     }
 
-    /* Анимация плавного появления секций при прокрутке */
+    header, main, footer {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Горизонтальный пунктирный разделитель секций */
+    .dashed-divider {
+      width: 100%;
+      border-top: 1px dashed #262626;
+    }
+
+    /* Чёткая отрисовка пиксель-арта */
+    .pixel-crisp {
+      shape-rendering: crispEdges;
+      image-rendering: pixelated;
+    }
+
+    /* Мигающий пиксельный квадрат у логотипа TOOCHKA */
+    @keyframes blinkDot {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .blink-pixel {
+      animation: blinkDot 1.05s steps(1, end) infinite;
+    }
+
+    /* Плавное появление секций при прокрутке */
     .reveal {
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(16px);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .reveal.visible {
+    .reveal.is-visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* 3D-наклон и мягкая подсветка карточек */
-    .tilt-card {
-      transform-style: preserve-3d;
-      transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      will-change: transform;
+    /* Вертикальный текст слева от блока игры на десктопе */
+    @media (min-width: 1024px) {
+      .vertical-label {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+      }
     }
 
-    /* Плавное появление модального окна */
-    .modal-backdrop {
+    /* Кнопки с резкой монохромной инверсией при наведении */
+    .btn-ghost {
+      border: 1px solid #ffffff;
+      background-color: transparent;
+      color: #ffffff;
+      transition: background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .btn-ghost:hover {
+      background-color: #ffffff;
+      color: #050505;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-solid {
+      border: 1px solid #ffffff;
+      background-color: #ffffff;
+      color: #050505;
+      transition: background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .btn-solid:hover {
+      background-color: #050505;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.18);
+    }
+
+    /* Плитка в сетке 4×2 раздела «ПОЧЕМУ И КАК?» */
+    .pixel-tile {
+      border: 1px solid #262626;
+      background-color: #050505;
+      transition: border-color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+    }
+    .pixel-tile:hover,
+    .pixel-tile.is-active {
+      border-color: #ffffff;
+      background-color: #0e0e0e;
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.14);
+      transform: translateY(-2px);
+    }
+
+    /* Оверлеи (полноэкранное меню и модальные окна) */
+    .overlay-shell {
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.2s ease;
     }
-    .modal-backdrop.open {
+    .overlay-shell.is-open {
       opacity: 1;
       pointer-events: auto;
     }
-    .modal-content {
-      transform: scale(0.94) translateY(12px);
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Тост-уведомление при копировании почты */
+    .pixel-toast {
+      opacity: 0;
+      transform: translate(-50%, 14px);
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
-    .modal-backdrop.open .modal-content {
-      transform: scale(1) translateY(0);
+    .pixel-toast.is-shown {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
     }
 
-    /* Тост-уведомление */
-    .toast-box {
-      transform: translateY(20px) scale(0.95);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Минималистичный тёмный скроллбар */
+    ::-webkit-scrollbar {
+      width: 6px;
     }
-    .toast-box.show {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-      pointer-events: auto;
+    ::-webkit-scrollbar-track {
+      background: #050505;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #262626;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #666666;
     }
   </style>
 </head>
-<body class="font-sans antialiased selection:bg-blue-100 selection:text-blue-700 relative min-h-screen">
+<body class="bg-void text-white font-mono antialiased selection:bg-white selection:text-black">
 
-  <!-- ===================================================================== -->
-  <!-- ДЕКОРАТИВНЫЙ ФОН: ГРАДИЕНТНЫЕ ПЯТНА + ИНТЕРАКТИВНЫЙ CANVAS С ТОЧКАМИ  -->
-  <!-- ===================================================================== -->
-  <div class="fixed inset-0 -z-20 overflow-hidden pointer-events-none bg-gradient-to-b from-white via-[#f4f8ff] to-white">
-    <!-- Переливающиеся мягкие синие пятна -->
-    <div class="absolute -top-24 -left-24 w-80 h-80 sm:w-[28rem] sm:h-[28rem] rounded-full bg-blue-400/20 blur-3xl animate-blob-1"></div>
-    <div class="absolute top-1/3 -right-24 w-72 h-72 sm:w-[26rem] sm:h-[26rem] rounded-full bg-sky-300/25 blur-3xl animate-blob-2"></div>
-    <div class="absolute -bottom-24 left-1/3 w-80 h-80 sm:w-[30rem] sm:h-[30rem] rounded-full bg-blue-300/15 blur-3xl animate-blob-3"></div>
-  </div>
-
-  <!-- Интерактивный холст с плавающими синими точками (отсылка к toochka.fun) -->
-  <canvas id="dotsCanvas" class="fixed inset-0 -z-10 w-full h-full pointer-events-none"></canvas>
-
-  <!-- ===================================================================== -->
-  <!-- 1. ЗАКРЕПЛЁННАЯ ПОЛУПРОЗРАЧНАЯ ШАПКА                                  -->
-  <!-- ===================================================================== -->
-  <header class="sticky top-0 z-40 w-full px-3 sm:px-6 pt-3">
-    <div class="max-w-6xl mx-auto glass-panel rounded-2xl shadow-glass px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-      <!-- Логотип с пульсирующей синей точкой -->
-      <a href="#home" class="flex items-center gap-2.5 group focus:outline-none">
-        <span class="relative flex h-3.5 w-3.5 items-center justify-center">
-          <span class="absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75 animate-pulse-ring"></span>
-          <span class="relative inline-flex rounded-full h-3 w-3 bg-gradient-to-tr from-blue-600 to-sky-400 shadow-sm"></span>
+  <!-- ======================================================================= -->
+  <!-- 1. ШАПКА САЙТА (HEADER)                                                 -->
+  <!-- ======================================================================= -->
+  <header class="sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-sm border-b border-dashed border-[#262626]">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <!-- Левая часть: логотип TOOCHKA + мигающий пиксельный квадрат -->
+      <a href="#hero" class="inline-flex items-center gap-2.5 group focus:outline-none py-2">
+        <span class="font-pixel text-sm sm:text-base tracking-wider text-white group-hover:text-[#cccccc] transition-colors">
+          TOOCHKA
         </span>
-        <span class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">
-          toochka<span class="text-blue-600">.fun</span>
-        </span>
+        <span class="inline-block w-2.5 h-2.5 bg-white blink-pixel" aria-hidden="true"></span>
       </a>
 
-      <!-- Навигация для компьютеров и планшетов -->
-      <nav class="hidden md:flex items-center gap-1 bg-blue-50/70 p-1 rounded-xl border border-blue-100/80">
-        <a href="#home" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-white transition-all">Главная</a>
-        <a href="#projects" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-white transition-all">Проекты</a>
-        <a href="#about" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-white transition-all">Обо мне</a>
-        <a href="#links" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-white transition-all">Ссылки</a>
-      </nav>
-
-      <!-- Правая часть шапки: кнопка режима точек + мобильное меню -->
-      <div class="flex items-center gap-2">
-        <button
-          id="toggleSpeedBtn"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 active:scale-95 transition-all"
-          title="Переключить скорость движения точек на фоне"
-        >
-          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-          <span id="speedBtnText">Ускорить точки</span>
-        </button>
-
-        <!-- Кнопка меню для телефонов -->
-        <button
-          id="mobileMenuBtn"
-          type="button"
-          aria-label="Открыть меню"
-          class="md:hidden p-2.5 rounded-xl bg-white/80 hover:bg-blue-50 border border-blue-100 text-slate-700 active:scale-95 transition-all"
-        >
-          <svg id="menuIconOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <svg id="menuIconClose" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Выпадающее мобильное меню -->
-    <div id="mobileMenu" class="hidden md:hidden max-w-6xl mx-auto mt-2 glass-panel rounded-2xl shadow-soft-blue p-3 flex flex-col gap-1">
-      <a href="#home" class="mobile-nav-link px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Главная</a>
-      <a href="#projects" class="mobile-nav-link px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Проекты</a>
-      <a href="#about" class="mobile-nav-link px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Обо мне</a>
-      <a href="#links" class="mobile-nav-link px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Ссылки</a>
+      <!-- Правая часть: подпись MENU и чёткий 3-полосный бургер -->
+      <button
+        id="menuOpenBtn"
+        type="button"
+        aria-label="Открыть навигационное меню"
+        aria-expanded="false"
+        class="inline-flex items-center gap-3.5 py-2.5 px-2 -mr-2 text-xs font-mono uppercase tracking-[0.22em] text-[#cccccc] hover:text-white transition-colors group"
+      >
+        <span>MENU</span>
+        <span class="flex flex-col justify-between w-6 h-4" aria-hidden="true">
+          <span class="block h-[2px] w-full bg-white transition-transform duration-150 group-hover:translate-x-0.5"></span>
+          <span class="block h-[2px] w-full bg-white"></span>
+          <span class="block h-[2px] w-full bg-white transition-transform duration-150 group-hover:-translate-x-0.5"></span>
+        </span>
+      </button>
     </div>
   </header>
 
-  <main class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+  <!-- Полноэкранное тёмное меню навигации -->
+  <div
+    id="menuOverlay"
+    class="overlay-shell fixed inset-0 z-50 bg-[#050505]/98 backdrop-blur-md flex flex-col justify-between p-6 sm:p-10"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Меню навигации TOOCHKA"
+  >
+    <!-- Верхняя панель меню -->
+    <div class="max-w-6xl w-full mx-auto flex items-center justify-between border-b border-dashed border-[#262626] pb-5">
+      <div class="inline-flex items-center gap-2.5">
+        <span class="font-pixel text-sm sm:text-base tracking-wider">TOOCHKA</span>
+        <span class="inline-block w-2.5 h-2.5 bg-white blink-pixel"></span>
+      </div>
+      <button
+        id="menuCloseBtn"
+        type="button"
+        class="inline-flex items-center gap-2.5 py-2 px-3.5 border border-[#262626] hover:border-white font-mono text-xs uppercase tracking-[0.2em] text-[#aaaaaa] hover:text-white transition-colors"
+      >
+        <span>ЗАКРЫТЬ</span>
+        <span class="text-base leading-none">×</span>
+      </button>
+    </div>
+
+    <!-- Ссылки на разделы сайта -->
+    <nav class="max-w-6xl w-full mx-auto my-auto py-8 flex flex-col gap-5 sm:gap-7">
+      <a href="#hero" class="menu-nav-link group inline-flex items-baseline gap-4 w-fit">
+        <span class="text-xs text-[#555555]">01</span>
+        <span class="font-pixel text-lg sm:text-3xl md:text-4xl text-[#cccccc] group-hover:text-white group-hover:translate-x-2 transition-all">ГЛАВНАЯ</span>
+      </a>
+      <a href="#meimei-clicker" class="menu-nav-link group inline-flex items-baseline gap-4 w-fit">
+        <span class="text-xs text-[#555555]">02</span>
+        <span class="font-pixel text-lg sm:text-3xl md:text-4xl text-[#cccccc] group-hover:text-white group-hover:translate-x-2 transition-all">МЕЙ-МЕЙ КЛИКЕР</span>
+      </a>
+      <a href="#about" class="menu-nav-link group inline-flex items-baseline gap-4 w-fit">
+        <span class="text-xs text-[#555555]">03</span>
+        <span class="font-pixel text-lg sm:text-3xl md:text-4xl text-[#cccccc] group-hover:text-white group-hover:translate-x-2 transition-all">О НАС</span>
+      </a>
+      <a href="#contacts" class="menu-nav-link group inline-flex items-baseline gap-4 w-fit">
+        <span class="text-xs text-[#555555]">04</span>
+        <span class="font-pixel text-lg sm:text-3xl md:text-4xl text-[#cccccc] group-hover:text-white group-hover:translate-x-2 transition-all">КОНТАКТЫ</span>
+      </a>
+    </nav>
+
+    <!-- Нижняя строка меню с прямыми внешними ссылками -->
+    <div class="max-w-6xl w-full mx-auto border-t border-dashed border-[#262626] pt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#888888]">
+      <span class="tracking-[0.14em] uppercase">TOOCHKA.FUN // MONOCHROME INDIE LAB</span>
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-2.5">
+        <a href="https://www.youtube.com/@toochka_0o0" target="_blank" rel="noopener noreferrer" class="hover:text-white underline underline-offset-4">YouTube (@toochka_0o0)</a>
+        <a href="https://www.tiktok.com/@toochka_0o0" target="_blank" rel="noopener noreferrer" class="hover:text-white underline underline-offset-4">TikTok (@toochka_0o0)</a>
+        <button type="button" data-open-modal="gameModal" class="menu-action-close hover:text-white underline underline-offset-4">RuStore</button>
+        <button type="button" data-copy-email class="hover:text-white underline underline-offset-4">mr.almazik@vk.com</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Основная рабочая область -->
+  <main class="max-w-6xl mx-auto px-5 sm:px-8">
 
     <!-- ===================================================================== -->
-    <!-- 2. ГЛАВНЫЙ ЭКРАН (HERO)                                               -->
+    <!-- 2. ГЛАВНЫЙ ЭКРАН (HERO SECTION)                                       -->
     <!-- ===================================================================== -->
-    <section id="home" class="pt-12 sm:pt-20 pb-16 sm:pb-24">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-        <!-- Левая колонка: текст и кнопки -->
-        <div class="lg:col-span-7 text-center lg:text-left">
-          <!-- Бейдж со статусом -->
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-blue-200/80 shadow-sm mb-6">
-            <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
-            <span class="text-xs sm:text-sm font-semibold text-blue-700 tracking-wide">Добро пожаловать</span>
+    <section id="hero" class="py-12 sm:py-20 lg:py-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        <!-- Левая колонка: 3-строчный пиксельный заголовок, подзаголовок и кнопка -->
+        <div class="lg:col-span-7 flex flex-col items-start">
+          <div class="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#888888] border border-[#262626] bg-[#0a0a0a] px-3 py-1.5 mb-6">
+            <span class="w-1.5 h-1.5 bg-white inline-block"></span>
+            <span>TOOCHKA.FUN // STUDIO</span>
           </div>
 
-          <!-- Крупный заголовок с переливающимся градиентом -->
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.12] mb-5">
-            Привет, это <br class="hidden sm:inline" />
-            <span class="text-shimmer animate-gradient-flow">toochka.fun</span>
+          <!-- Трёхстрочный пиксельный заголовок -->
+          <h1 class="font-pixel text-[22px] sm:text-4xl lg:text-[42px] leading-[1.4] tracking-wide uppercase text-white mb-6">
+            <span class="block">МЫ СОЗДАЁМ</span>
+            <span class="block">ПОЛЕЗНЫЕ</span>
+            <span class="block">ВЕЩИ</span>
           </h1>
 
-          <!-- Анимация печатающегося текста -->
-          <div class="flex items-center justify-center lg:justify-start gap-1.5 text-xl sm:text-2xl font-bold text-blue-600 min-h-[2.25rem] mb-5">
-            <span id="typedText"></span>
-            <span class="inline-block w-0.5 h-6 sm:h-7 bg-sky-500 rounded-full animate-cursor-blink"></span>
-          </div>
-
-          <!-- Короткое описание — замени текст на свой -->
-          <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8">
-            Моё личное пространство в интернете, где я собираю свои веб-проекты, мини-игры,
-            полезные инструменты и смелые идеи. Нажми в любом месте экрана — и фон оживёт!
+          <!-- Подзаголовок в приглушённом сером моноширинном шрифте -->
+          <p class="text-sm sm:text-base text-[#888888] leading-relaxed max-w-lg mb-9">
+            Делаем понятные, лёгкие и честные игры и проекты без лишнего шума.
           </p>
 
-          <!-- Кнопки действий -->
-          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
-            <a
-              href="#projects"
-              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 shadow-glow-blue hover:-translate-y-0.5 active:scale-95 transition-all"
-            >
-              <span>Смотреть проекты</span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
+          <!-- Прямоугольная ghost-кнопка с белой рамкой 1px -->
+          <a
+            href="#meimei-clicker"
+            class="btn-ghost inline-flex items-center justify-center gap-3.5 px-6 py-3.5 text-xs uppercase tracking-[0.18em] w-full sm:w-auto"
+          >
+            <span>СМОТРЕТЬ ПРОЕКТ</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
 
-            <a
-              href="#links"
-              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-sm sm:text-base font-semibold text-blue-700 glass-panel hover:bg-blue-50/90 hover:border-blue-300 shadow-sm hover:-translate-y-0.5 active:scale-95 transition-all"
+        <!-- Правая колонка: оптимизированная 3D wireframe сцена на HTML5 Canvas -->
+        <div class="lg:col-span-5 w-full">
+          <div id="heroCanvasWrap" class="relative w-full h-[300px] sm:h-[370px] lg:h-[410px] border border-[#1a1a1a] bg-[#070707] overflow-hidden cursor-grab active:cursor-grabbing">
+            <canvas id="heroCanvas" class="block w-full h-full"></canvas>
+
+            <!-- Технические угловые подписи -->
+            <span class="pointer-events-none absolute top-3 left-3 text-[10px] tracking-[0.18em] text-[#555555] uppercase">
+              WIREFRAME_3D // 95% OPT
+            </span>
+            <span id="canvasStatusTag" class="pointer-events-none absolute bottom-3 right-3 text-[10px] tracking-[0.18em] text-[#555555] uppercase">
+              [ DRAG / HOVER ]
+            </span>
+
+            <!-- Чёткие белые уголки рамки -->
+            <span class="pointer-events-none absolute top-0 left-0 w-2 h-2 border-t border-l border-white/60"></span>
+            <span class="pointer-events-none absolute top-0 right-0 w-2 h-2 border-t border-r border-white/60"></span>
+            <span class="pointer-events-none absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/60"></span>
+            <span class="pointer-events-none absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/60"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Пунктирный разделитель -->
+    <div class="dashed-divider"></div>
+
+    <!-- ===================================================================== -->
+    <!-- 3. СЕКЦИЯ ИГРЫ «МЕЙ-МЕЙ КЛИКЕР» (В СТИЛЕ RECENTLY RELEASED / KASSETA) -->
+    <!-- ===================================================================== -->
+    <section id="meimei-clicker" class="relative py-16 sm:py-24 reveal overflow-hidden">
+      <!-- Едва заметный технический контур лапки барса на правом краю десктопа (как кассета на ex8.tech) -->
+      <div class="hidden xl:block pointer-events-none absolute -right-12 top-1/2 -translate-y-1/2 opacity-[0.09]" aria-hidden="true">
+        <svg width="240" height="280" viewBox="0 0 240 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="220" height="260" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 4" />
+          <rect x="26" y="26" width="188" height="228" stroke="#ffffff" stroke-width="0.8" />
+          <!-- Схематическая лапка снежного барса -->
+          <ellipse cx="78" cy="108" rx="16" ry="22" stroke="#ffffff" stroke-width="1.2" />
+          <ellipse cx="120" cy="88" rx="17" ry="24" stroke="#ffffff" stroke-width="1.2" />
+          <ellipse cx="162" cy="108" rx="16" ry="22" stroke="#ffffff" stroke-width="1.2" />
+          <path d="M72 168 C72 142, 168 142, 168 168 C168 198, 146 212, 120 212 C94 212, 72 198, 72 168 Z" stroke="#ffffff" stroke-width="1.2" />
+          <line x1="26" y1="234" x2="214" y2="234" stroke="#ffffff" stroke-width="0.8" />
+        </svg>
+      </div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row items-stretch lg:items-center gap-8 lg:gap-10">
+        <!-- Левый край: вертикально повёрнутая надпись «СКОРО НА RUSTORE» -->
+        <div class="lg:w-8 shrink-0 flex items-center lg:justify-center">
+          <span class="vertical-label text-[11px] sm:text-xs uppercase tracking-[0.28em] text-[#666666] select-none">
+            СКОРО НА RUSTORE
+          </span>
+        </div>
+
+        <!-- Левая медиа-карточка: квадратная обложка-тизер «Мей-Мей кликер» -->
+        <div class="w-full lg:w-[340px] xl:w-[360px] shrink-0">
+          <div class="relative aspect-square w-full border border-[#262626] bg-[#0a0a0a] overflow-hidden group">
+            <!-- Встроенный SVG-тизер: снежный барс Мей-Мей в тенях + лапка + огромный белый знак "?" -->
+            <svg
+              class="absolute inset-0 w-full h-full object-cover"
+              viewBox="0 0 400 400"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="Тизер игры Мей-Мей кликер — снежный барс со знаком вопроса"
             >
-              <span>Связаться</span>
-            </a>
+              <defs>
+                <!-- Мрачный глубокий градиент теней -->
+                <radialGradient id="cubGlow" cx="50%" cy="46%" r="58%">
+                  <stop offset="0%" stop-color="#3c3c3c" />
+                  <stop offset="48%" stop-color="#191919" />
+                  <stop offset="100%" stop-color="#060606" />
+                </radialGradient>
+                <radialGradient id="furGrad" cx="50%" cy="38%" r="55%">
+                  <stop offset="0%" stop-color="#6e6e6e" />
+                  <stop offset="60%" stop-color="#2e2e2e" />
+                  <stop offset="100%" stop-color="#111111" />
+                </radialGradient>
+                <radialGradient id="pawGrad" cx="50%" cy="35%" r="60%">
+                  <stop offset="0%" stop-color="#5a5a5a" />
+                  <stop offset="100%" stop-color="#161616" />
+                </radialGradient>
+                <!-- Фильтр лёгкого шума/зернистости для фактуры меха -->
+                <filter id="furTexture" x="-10%" y="-10%" width="120%" height="120%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" result="noise" />
+                  <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
+                  <feBlend mode="soft-light" in="SourceGraphic" in2="grayNoise" />
+                </filter>
+              </defs>
+
+              <!-- Тёмный фон с мягкой подсветкой по центру -->
+              <rect width="400" height="400" fill="url(#cubGlow)" />
+
+              <!-- Силуэт и голова снежного барса Мей-Мей -->
+              <g filter="url(#furTexture)">
+                <!-- Тело / плечи, уходящие в тень -->
+                <path d="M55 400 C62 290, 92 228, 200 228 C308 228, 338 290, 345 400 Z" fill="#1e1e1e" />
+
+                <!-- Левое круглое ухо барса -->
+                <path d="M84 112 C62 56, 86 12, 134 26 C158 34, 168 58, 162 84 Z" fill="#2c2c2c" stroke="#474747" stroke-width="2" />
+                <path d="M98 92 C86 62, 98 34, 128 42 C142 46, 148 64, 142 82 Z" fill="#121212" />
+
+                <!-- Правое круглое ухо барса -->
+                <path d="M316 112 C338 56, 314 12, 266 26 C242 34, 232 58, 238 84 Z" fill="#2c2c2c" stroke="#474747" stroke-width="2" />
+                <path d="M302 92 C314 62, 302 34, 272 42 C258 46, 252 64, 258 82 Z" fill="#121212" />
+
+                <!-- Голова и пушистые щёки -->
+                <path d="M76 172 C72 96, 122 44, 200 44 C278 44, 328 96, 324 172 C322 232, 276 266, 200 266 C124 266, 78 232, 76 172 Z" fill="url(#furGrad)" />
+
+                <!-- Пятна снежного барса на лбу, щеках и плечах -->
+                <g fill="#0c0c0c" opacity="0.82">
+                  <ellipse cx="164" cy="64" rx="5" ry="3.5" transform="rotate(-15 164 64)" />
+                  <ellipse cx="182" cy="56" rx="4.5" ry="3" />
+                  <ellipse cx="200" cy="62" rx="5.5" ry="3.2" />
+                  <ellipse cx="218" cy="57" rx="4.5" ry="3" />
+                  <ellipse cx="236" cy="65" rx="5" ry="3.5" transform="rotate(15 236 65)" />
+                  <ellipse cx="145" cy="78" rx="6" ry="4" transform="rotate(-25 145 78)" />
+                  <ellipse cx="255" cy="78" rx="6" ry="4" transform="rotate(25 255 78)" />
+                  <ellipse cx="176" cy="78" rx="4" ry="3" />
+                  <ellipse cx="200" cy="76" rx="4" ry="2.8" />
+                  <ellipse cx="224" cy="78" rx="4" ry="3" />
+                  <!-- Боковые пятна на щеках и плечах -->
+                  <ellipse cx="100" cy="144" rx="8" ry="5" transform="rotate(-20 100 144)" />
+                  <ellipse cx="300" cy="144" rx="8" ry="5" transform="rotate(20 300 144)" />
+                  <ellipse cx="94" cy="196" rx="9" ry="5.5" transform="rotate(12 94 196)" />
+                  <ellipse cx="306" cy="196" rx="9" ry="5.5" transform="rotate(-12 306 196)" />
+                  <ellipse cx="86" cy="272" rx="11" ry="6.5" transform="rotate(-18 86 272)" />
+                  <ellipse cx="116" cy="308" rx="10" ry="6" transform="rotate(-10 116 308)" />
+                  <ellipse cx="314" cy="272" rx="11" ry="6.5" transform="rotate(18 314 272)" />
+                  <ellipse cx="284" cy="308" rx="10" ry="6" transform="rotate(10 284 308)" />
+                  <ellipse cx="80" cy="348" rx="12" ry="7" />
+                  <ellipse cx="320" cy="348" rx="12" ry="7" />
+                </g>
+
+                <!-- Большие тёмные глаза барса с тонкими бликами -->
+                <g>
+                  <!-- Левый глаз -->
+                  <ellipse cx="136" cy="134" rx="26" ry="22" fill="#070707" stroke="#363636" stroke-width="2" />
+                  <circle cx="128" cy="126" r="5" fill="#ffffff" opacity="0.32" />
+                  <circle cx="144" cy="139" r="2.2" fill="#ffffff" opacity="0.2" />
+                  <!-- Правый глаз -->
+                  <ellipse cx="264" cy="134" rx="26" ry="22" fill="#070707" stroke="#363636" stroke-width="2" />
+                  <circle cx="256" cy="126" r="5" fill="#ffffff" opacity="0.32" />
+                  <circle cx="272" cy="139" r="2.2" fill="#ffffff" opacity="0.2" />
+                </g>
+
+                <!-- Тонкие светлые усы -->
+                <g stroke="#999999" stroke-width="1" opacity="0.35">
+                  <line x1="120" y1="196" x2="52" y2="188" />
+                  <line x1="118" y1="208" x2="46" y2="212" />
+                  <line x1="280" y1="196" x2="348" y2="188" />
+                  <line x1="282" y1="208" x2="354" y2="212" />
+                </g>
+
+                <!-- Поднятая пушистая лапка с чёрными подушечками на переднем плане -->
+                <g>
+                  <path d="M114 400 C112 346, 134 294, 200 294 C266 294, 288 346, 286 400 Z" fill="url(#pawGrad)" stroke="#353535" stroke-width="2" />
+                  <!-- Пальцы-подушечки -->
+                  <ellipse cx="144" cy="342" rx="13" ry="18" transform="rotate(-14 144 342)" fill="#080808" />
+                  <ellipse cx="178" cy="322" rx="13" ry="19" transform="rotate(-5 178 322)" fill="#080808" />
+                  <ellipse cx="218" cy="322" rx="13" ry="19" transform="rotate(5 218 322)" fill="#080808" />
+                  <ellipse cx="252" cy="342" rx="13" ry="18" transform="rotate(14 252 342)" fill="#080808" />
+                  <!-- Центральная подушечка лапы -->
+                  <path d="M156 382 C156 356, 244 356, 244 382 C244 398, 224 404, 200 404 C176 404, 156 398, 156 382 Z" fill="#070707" />
+                </g>
+              </g>
+
+              <!-- Мягкая виньетка по краям карточки -->
+              <rect width="400" height="400" fill="none" stroke="#050505" stroke-width="28" opacity="0.65" />
+
+              <!-- Крупный жирный белый знак вопроса "?" по центру мордочки -->
+              <g>
+                <path
+                  d="M118 158 C118 112, 152 84, 202 84 C252 84, 286 112, 286 156 C286 192, 264 212, 240 226 C225 235, 222 242, 222 256 L222 264 L170 264 L170 250 C170 222, 181 206, 202 194 C218 184, 228 176, 228 160 C228 144, 217 134, 200 134 C182 134, 172 146, 172 164 L118 164 Z"
+                  fill="#ffffff"
+                />
+                <rect x="170" y="280" width="52" height="52" fill="#ffffff" />
+              </g>
+            </svg>
+
+            <!-- Слой реального изображения: если загрузить meimei.jpg в репозиторий GitHub, оно покажется автоматически -->
+            <img
+              src="meimei.jpg"
+              alt="Мей-Мей кликер"
+              class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-500 group-hover:scale-[1.03]"
+              onerror="this.style.display='none'"
+            />
+
+            <!-- Угловая метка RUSTORE EXCLUSIVE с точным монохромным логотипом RuStore -->
+            <div class="absolute top-3 left-3 z-20 inline-flex items-center gap-2 bg-[#050505]/90 border border-[#262626] px-2.5 py-1.5">
+              <!-- Точный монохромный логотип RuStore: 3 наклонённых перекрывающихся белых скруглённых прямоугольника -->
+              <svg class="w-4 h-4 shrink-0" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <g transform="skewY(14)">
+                  <rect x="18" y="2" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.2" />
+                  <rect x="11" y="5" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.2" />
+                  <rect x="4" y="8" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.2" />
+                </g>
+              </svg>
+              <span class="text-[10px] uppercase tracking-[0.16em] text-white">RUSTORE EXCLUSIVE</span>
+            </div>
+
+            <!-- Индикатор 01 в нижнем правом углу -->
+            <div class="absolute bottom-3 right-3 z-20 bg-[#050505]/90 border border-[#262626] px-2 py-1 text-[10px] tracking-[0.16em] text-[#888888]">
+              GAME #01
+            </div>
+          </div>
+        </div>
+
+        <!-- Правый информационный блок игры -->
+        <div class="flex-1 min-w-0 max-w-xl">
+          <!-- Подпись, подчёркивающая, что в RuStore только одна игра -->
+          <div class="text-[11px] uppercase tracking-[0.2em] text-[#888888] mb-3">
+            01 // ЕДИНСТВЕННАЯ ИГРА В RUSTORE
+          </div>
+
+          <h2 class="font-pixel text-xl sm:text-2xl md:text-[28px] leading-snug uppercase tracking-wider text-white">
+            МЕЙ-МЕЙ КЛИКЕР
+          </h2>
+          <!-- Короткая белая горизонтальная черта под заголовком -->
+          <div class="w-9 h-[2px] bg-white mt-3.5 mb-7"></div>
+
+          <!-- Структурированный список характеристик с монохромными SVG-иконками -->
+          <div class="space-y-4 text-xs sm:text-sm leading-relaxed">
+            <!-- 1. Платформа (монохромный логотип RuStore — 3 наклонные карточки) -->
+            <div class="flex items-start gap-3.5">
+              <span class="mt-0.5 shrink-0 text-white" aria-hidden="true">
+                <svg class="w-4 h-4" viewBox="0 0 32 32" fill="none">
+                  <g transform="skewY(14)">
+                    <rect x="18" y="2" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.3" />
+                    <rect x="11" y="5" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.3" />
+                    <rect x="4" y="8" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.3" />
+                  </g>
+                </svg>
+              </span>
+              <p class="text-[#888888]">
+                <span class="text-[#666666]">Платформа:</span>
+                <span class="text-white ml-1.5">Android · RuStore</span>
+              </p>
+            </div>
+
+            <!-- 2. Жанр (пиксельный аркадный пришелец) -->
+            <div class="flex items-start gap-3.5">
+              <span class="mt-0.5 shrink-0 text-[#888888]" aria-hidden="true">
+                <svg class="pixel-crisp w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+                  <rect x="3" y="2" width="2" height="2" />
+                  <rect x="11" y="2" width="2" height="2" />
+                  <rect x="5" y="4" width="6" height="1" />
+                  <rect x="3" y="5" width="10" height="2" />
+                  <rect x="2" y="7" width="3" height="2" />
+                  <rect x="6" y="7" width="4" height="2" />
+                  <rect x="11" y="7" width="3" height="2" />
+                  <rect x="2" y="9" width="12" height="2" />
+                  <rect x="3" y="11" width="2" height="2" />
+                  <rect x="11" y="11" width="2" height="2" />
+                </svg>
+              </span>
+              <p class="text-[#888888]">
+                <span class="text-[#666666]">Жанр:</span>
+                <span class="text-white ml-1.5">Кликер / Аркада</span>
+              </p>
+            </div>
+
+            <!-- 3. Модель (пиксельный щит честной игры) -->
+            <div class="flex items-start gap-3.5">
+              <span class="mt-0.5 shrink-0 text-[#888888]" aria-hidden="true">
+                <svg class="pixel-crisp w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+                  <rect x="3" y="2" width="10" height="2" />
+                  <rect x="2" y="4" width="2" height="5" />
+                  <rect x="12" y="4" width="2" height="5" />
+                  <rect x="3" y="9" width="2" height="2" />
+                  <rect x="11" y="9" width="2" height="2" />
+                  <rect x="5" y="11" width="2" height="2" />
+                  <rect x="9" y="11" width="2" height="2" />
+                  <rect x="7" y="13" width="2" height="2" />
+                  <rect x="6" y="6" width="4" height="2" />
+                </svg>
+              </span>
+              <p class="text-[#888888]">
+                <span class="text-[#666666]">Модель:</span>
+                <span class="text-white ml-1.5">Без рекламы, доната и интернета</span>
+              </p>
+            </div>
+
+            <!-- 4. Описание (пиксельное сердце) -->
+            <div class="flex items-start gap-3.5">
+              <span class="mt-0.5 shrink-0 text-[#888888]" aria-hidden="true">
+                <svg class="pixel-crisp w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+                  <rect x="3" y="3" width="4" height="2" />
+                  <rect x="9" y="3" width="4" height="2" />
+                  <rect x="2" y="5" width="12" height="3" />
+                  <rect x="3" y="8" width="10" height="2" />
+                  <rect x="5" y="10" width="6" height="2" />
+                  <rect x="7" y="12" width="2" height="2" />
+                </svg>
+              </span>
+              <p class="text-[#888888]">
+                <span class="text-[#666666]">Описание:</span>
+                <span class="text-[#e5e5e5] ml-1.5">
+                  Кликер про снежного барса Мей-Мей. Без рекламы, доната и интернета.
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Ряд действий: белая кнопка «RUSTORE · СКОРО ↗» + ссылка «ПОДРОБНЕЕ» -->
+          <div class="mt-9 flex flex-wrap items-center gap-6">
+            <button
+              type="button"
+              data-open-modal="gameModal"
+              class="btn-solid inline-flex items-center justify-center gap-3 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em]"
+            >
+              <span>RUSTORE · СКОРО</span>
+              <span aria-hidden="true">↗</span>
+            </button>
 
             <button
               type="button"
-              data-copy-site
-              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-sm font-semibold text-slate-600 hover:text-blue-700 bg-white/70 hover:bg-white border border-slate-200/80 hover:border-blue-200 active:scale-95 transition-all"
+              data-open-modal="gameModal"
+              class="text-xs uppercase tracking-[0.18em] text-[#888888] hover:text-white underline underline-offset-8 decoration-[#555555] hover:decoration-white transition-colors py-2"
             >
-              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              <span>Поделиться сайтом</span>
+              ПОДРОБНЕЕ
             </button>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Правая колонка: интерактивная анимированная карточка «Пульс точек» -->
-        <div class="lg:col-span-5">
-          <div class="tilt-card glass-panel rounded-3xl p-6 sm:p-7 shadow-soft-blue relative overflow-hidden animate-float-slow">
-            <!-- Мягкий блик внутри карточки -->
-            <div class="absolute -top-12 -right-12 w-36 h-36 rounded-full bg-gradient-to-br from-blue-500/20 to-sky-400/20 blur-2xl pointer-events-none"></div>
+    <!-- Пунктирный разделитель -->
+    <div class="dashed-divider"></div>
 
-            <div class="flex items-center justify-between mb-6 relative z-10">
-              <div class="flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-400 flex items-center justify-center text-white shadow-md">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="3" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v4m0 12v4M2 12h4m12 0h4m-3.05-6.95l-2.83 2.83m-4.24 4.24l-2.83 2.83m0-9.9l2.83 2.83m4.24 4.24l2.83 2.83" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 class="text-sm font-bold text-slate-900">Интерактивный фон</h2>
-                  <p class="text-xs text-slate-500">Живая сеть точек</p>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-100">
-                Live
-              </span>
-            </div>
-
-            <!-- Счётчики точек и кликов -->
-            <div class="grid grid-cols-2 gap-3 mb-5 relative z-10">
-              <div class="rounded-2xl bg-gradient-to-br from-[#f4f8ff] to-white border border-blue-100 p-4">
-                <p class="text-xs font-medium text-slate-500 mb-1">Точек в сети</p>
-                <p id="activeDotsCount" class="text-2xl sm:text-3xl font-extrabold text-blue-600">0</p>
-              </div>
-              <div class="rounded-2xl bg-gradient-to-br from-[#f4f8ff] to-white border border-blue-100 p-4">
-                <p class="text-xs font-medium text-slate-500 mb-1">Твоих волн</p>
-                <p id="clickWavesCount" class="text-2xl sm:text-3xl font-extrabold text-sky-500">0</p>
-              </div>
-            </div>
-
-            <!-- Подсказка и кнопки управления точками -->
-            <p class="text-xs sm:text-sm text-slate-600 mb-5 leading-relaxed relative z-10">
-              Двигай мышкой или води пальцем по экрану — точки будут притягиваться. Кликай в любом месте, чтобы запускать волны!
-            </p>
-
-            <div class="flex items-center gap-2.5 relative z-10">
-              <button
-                id="spawnWaveBtn"
-                type="button"
-                class="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all shadow-sm"
-              >
-                Создать всплеск
-              </button>
-              <button
-                id="resetDotsBtn"
-                type="button"
-                class="py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-600 hover:text-blue-700 bg-blue-50/80 hover:bg-blue-100/80 active:scale-95 transition-all"
-              >
-                Сброс
-              </button>
-            </div>
+    <!-- ===================================================================== -->
+    <!-- 4. СЕКЦИЯ «ПОЧЕМУ И КАК?» (СЕТКА 4×2 ПИКСЕЛЬНЫХ ИКОНОК)               -->
+    <!-- ===================================================================== -->
+    <section id="about" class="py-16 sm:py-24 reveal">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <!-- Левая колонка: интерактивная сетка 4×2 монохромных пиксельных плиток -->
+        <div class="lg:col-span-6">
+          <div id="pixelGrid" class="grid grid-cols-4 gap-2.5 sm:gap-3">
+            <!-- 8 плиток генерируются из массива PIXEL_TILES -->
           </div>
+
+          <!-- Панель активной подсказки под сеткой -->
+          <div class="mt-3.5 border border-[#262626] bg-[#0a0a0a] px-4 py-3 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span id="tileCounter" class="text-[11px] text-[#666666]">[01/08]</span>
+                <span id="tileLabel" class="text-xs font-semibold uppercase tracking-[0.14em] text-white truncate">
+                  Сделано с душой
+                </span>
+              </div>
+              <p id="tileDesc" class="text-[11px] text-[#888888] mt-1 leading-relaxed">
+                Каждая механика и деталь прорабатывается вручную, без шаблонных решений.
+              </p>
+            </div>
+            <span class="shrink-0 w-2 h-2 bg-white hidden sm:inline-block" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <!-- Правая колонка: заголовок, описание принципов и ссылка на манифест -->
+        <div class="lg:col-span-6 lg:pl-4">
+          <h2 class="font-pixel text-xl sm:text-2xl md:text-[26px] uppercase tracking-wider text-white">
+            ПОЧЕМУ И КАК?
+          </h2>
+          <div class="w-9 h-[2px] bg-white mt-3.5 mb-6"></div>
+
+          <p class="text-sm sm:text-base text-[#888888] leading-relaxed mb-7 max-w-lg">
+            Мы делаем игры и инструменты, в которые приятно заходить самому — без навязчивой рекламы, пейволлов и лишнего веса. Фокус на чистом визуале и стабильной работе.
+          </p>
+
+          <button
+            type="button"
+            data-open-modal="manifestoModal"
+            class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-[#cccccc] hover:text-white underline underline-offset-8 decoration-[#555555] hover:decoration-white transition-colors py-1"
+          >
+            <span>Открыть манифест</span>
+            <span aria-hidden="true">↗</span>
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- ===================================================================== -->
-    <!-- 3. РАЗДЕЛ «ПРОЕКТЫ»                                                   -->
-    <!-- ===================================================================== -->
-    <section id="projects" class="py-14 sm:py-20 reveal">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-        <div>
-          <span class="inline-block text-xs font-bold uppercase tracking-widest text-sky-600 mb-2">Портфолио</span>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Мои проекты</h2>
-        </div>
-        <p class="text-sm sm:text-base text-slate-600 max-w-md">
-          Шаблоны карточек уже готовы — нажми «Подробнее», чтобы посмотреть пример описания, и легко замени их на свои разработки.
-        </p>
-      </div>
-
-      <!-- Сетка из 3 карточек проектов -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- Карточка проекта 1: Веб-приложение -->
-        <article class="tilt-card glass-panel rounded-3xl p-6 shadow-glass hover:shadow-soft-blue hover:border-blue-300/70 flex flex-col justify-between group">
-          <div>
-            <div class="flex items-center justify-between mb-5">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-500 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                <!-- Иконка веб-приложения -->
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <rect x="3" y="4" width="18" height="16" rx="3" />
-                  <path stroke-linecap="round" d="M3 9h18M8 14h4m-4 3h8" />
-                </svg>
-              </div>
-              <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
-                В разработке
-              </span>
-            </div>
-
-            <h3 class="text-xl font-bold text-slate-900 mb-2.5 group-hover:text-blue-600 transition-colors">
-              Веб-приложение
-            </h3>
-            <p class="text-sm text-slate-600 leading-relaxed mb-5">
-              Современный интерактивный сервис прямо в браузере: чистый интерфейс, плавные переходы и удобная работа на телефоне.
-            </p>
-
-            <!-- Теги -->
-            <div class="flex flex-wrap gap-2 mb-6">
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-blue-700 border border-blue-100">HTML / CSS</span>
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-blue-700 border border-blue-100">JavaScript</span>
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-sky-700 border border-sky-100">UI / UX</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            data-project="webapp"
-            class="w-full py-3 px-4 rounded-xl text-sm font-semibold text-blue-700 bg-blue-50/90 hover:bg-blue-600 hover:text-white border border-blue-100 hover:border-blue-600 transition-all active:scale-95 flex items-center justify-center gap-2"
-          >
-            <span>Подробнее</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </article>
-
-        <!-- Карточка проекта 2: Игровой проект -->
-        <article class="tilt-card glass-panel rounded-3xl p-6 shadow-glass hover:shadow-soft-blue hover:border-sky-300/70 flex flex-col justify-between group">
-          <div>
-            <div class="flex items-center justify-between mb-5">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                <!-- Иконка геймпада -->
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12h4m-2-2v4m7-3h.01M17 13h.01M5 8h14a3 3 0 012.95 3.5l-.7 4.2A3 3 0 0118.29 18a2.5 2.5 0 01-2.16-1.25L15 15H9l-1.13 1.75A2.5 2.5 0 015.71 18a3 3 0 01-2.96-2.3l-.7-4.2A3 3 0 015 8z" />
-                </svg>
-              </div>
-              <span class="text-xs font-semibold px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-100">
-                Геймдев
-              </span>
-            </div>
-
-            <h3 class="text-xl font-bold text-slate-900 mb-2.5 group-hover:text-blue-600 transition-colors">
-              Игровой проект
-            </h3>
-            <p class="text-sm text-slate-600 leading-relaxed mb-5">
-              Динамичная браузерная мини-игра с сочными анимациями, таблицей рекордов и отзывчивым управлением на ПК и смартфоне.
-            </p>
-
-            <!-- Теги -->
-            <div class="flex flex-wrap gap-2 mb-6">
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-blue-700 border border-blue-100">Canvas 2D</span>
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-sky-700 border border-sky-100">Анимации</span>
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-blue-700 border border-blue-100">Игры</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            data-project="game"
-            class="w-full py-3 px-4 rounded-xl text-sm font-semibold text-blue-700 bg-blue-50/90 hover:bg-blue-600 hover:text-white border border-blue-100 hover:border-blue-600 transition-all active:scale-95 flex items-center justify-center gap-2"
-          >
-            <span>Подробнее</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </article>
-
-        <!-- Карточка проекта 3: Мини-инструмент -->
-        <article class="tilt-card glass-panel rounded-3xl p-6 shadow-glass hover:shadow-soft-blue hover:border-blue-300/70 flex flex-col justify-between group">
-          <div>
-            <div class="flex items-center justify-between mb-5">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-700 to-sky-500 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                <!-- Иконка инструмента -->
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              </div>
-              <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
-                Утилита
-              </span>
-            </div>
-
-            <h3 class="text-xl font-bold text-slate-900 mb-2.5 group-hover:text-blue-600 transition-colors">
-              Мини-инструмент
-            </h3>
-            <p class="text-sm text-slate-600 leading-relaxed mb-5">
-              Быстрый онлайн-помощник без рекламы и лишних кнопок — открыл, сделал нужную задачу за секунду и пошёл дальше.
-            </p>
-
-            <!-- Теги -->
-            <div class="flex flex-wrap gap-2 mb-6">
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-blue-700 border border-blue-100">Быстро</span>
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-sky-700 border border-sky-100">Инструмент</span>
-              <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[#f4f8ff] text-blue-700 border border-blue-100">Open Source</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            data-project="tool"
-            class="w-full py-3 px-4 rounded-xl text-sm font-semibold text-blue-700 bg-blue-50/90 hover:bg-blue-600 hover:text-white border border-blue-100 hover:border-blue-600 transition-all active:scale-95 flex items-center justify-center gap-2"
-          >
-            <span>Подробнее</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </article>
-      </div>
-    </section>
+    <!-- Пунктирный разделитель -->
+    <div class="dashed-divider"></div>
 
     <!-- ===================================================================== -->
-    <!-- 4. РАЗДЕЛ «ОБО МНЕ И НАВЫКИ»                                          -->
+    <!-- 5. НИЖНЯЯ СТРОКА МЕТРИК И СОЦСЕТЕЙ (4 КОЛОНКИ КАК НА EX8.TECH)        -->
     <!-- ===================================================================== -->
-    <section id="about" class="py-14 sm:py-20 reveal">
-      <div class="glass-panel rounded-3xl p-6 sm:p-10 shadow-soft-blue relative overflow-hidden">
-        <!-- Декоративная синяя полоса сверху -->
-        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600"></div>
+    <section id="contacts" class="py-14 sm:py-20 reveal">
+      <div class="grid grid-cols-2 lg:grid-cols-4 border border-[#1a1a1a] lg:border-0 lg:divide-x lg:divide-[#262626]">
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <!-- Текст «Обо мне» (легко заменить на свой) -->
-          <div class="lg:col-span-6">
-            <span class="inline-block text-xs font-bold uppercase tracking-widest text-sky-600 mb-2">Обо мне</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-              Люблю код, дизайн и живые идеи
-            </h2>
-            <p class="text-slate-600 leading-relaxed mb-4">
-              Привет! Я создаю небольшие сайты, экспериментирую с играми и изучаю веб-технологии.
-              Домен <span class="font-semibold text-blue-600">toochka.fun</span> — это моя площадка для запуска новых проектов и проверки смелых задумок.
-            </p>
-            <p class="text-slate-600 leading-relaxed">
-              Мне нравится делать интерфейсы чистыми, быстрыми и приятными в использовании — чтобы каждая мелочь работала плавно.
-            </p>
-          </div>
-
-          <!-- Анимированные плашки навыков и увлечений -->
-          <div class="lg:col-span-6">
-            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4">Технологии и увлечения</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-
-              <!-- Навык 1 -->
-              <div class="flex items-center gap-3.5 p-4 rounded-2xl bg-white/90 border border-blue-100 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group">
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="font-bold text-slate-900 text-sm">HTML / CSS / JS</p>
-                  <p class="text-xs text-slate-500">Современный веб</p>
-                </div>
-              </div>
-
-              <!-- Навык 2 -->
-              <div class="flex items-center gap-3.5 p-4 rounded-2xl bg-white/90 border border-blue-100 hover:border-sky-300 hover:shadow-md hover:-translate-y-0.5 transition-all group">
-                <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="font-bold text-slate-900 text-sm">Разработка игр</p>
-                  <p class="text-xs text-slate-500">Механики и прототипы</p>
-                </div>
-              </div>
-
-              <!-- Навык 3 -->
-              <div class="flex items-center gap-3.5 p-4 rounded-2xl bg-white/90 border border-blue-100 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group">
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="font-bold text-slate-900 text-sm">Дизайн</p>
-                  <p class="text-xs text-slate-500">Минимализм и анимации</p>
-                </div>
-              </div>
-
-              <!-- Навык 4 -->
-              <div class="flex items-center gap-3.5 p-4 rounded-2xl bg-white/90 border border-blue-100 hover:border-sky-300 hover:shadow-md hover:-translate-y-0.5 transition-all group">
-                <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="font-bold text-slate-900 text-sm">Эксперименты</p>
-                  <p class="text-xs text-slate-500">Новые фишки и идеи</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================== -->
-    <!-- 5. РАЗДЕЛ «ССЫЛКИ И СВЯЗЬ»                                            -->
-    <!-- ===================================================================== -->
-    <section id="links" class="py-14 sm:py-20 reveal">
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <span class="inline-block text-xs font-bold uppercase tracking-widest text-sky-600 mb-2">Контакты</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">Ссылки и связь</h2>
-        <p class="text-slate-600 text-sm sm:text-base">
-          Подписывайся, смотри исходники проектов или пиши, если хочешь что-нибудь обсудить.
-        </p>
-      </div>
-
-      <!-- ЗАМЕНИ ССЫЛКИ (href="...") НА СВОИ АККАУНТЫ -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-
-        <!-- Кнопка GitHub -->
+        <!-- Колонка 1: 1 игра в RuStore (клик плавно прокручивает к Мей-Мей кликеру) -->
         <a
-          href="https://github.com/ваш-логин"
+          href="#meimei-clicker"
+          class="group flex flex-col items-center justify-center text-center py-8 px-4 border-b border-r border-[#1a1a1a] lg:border-b-0 lg:border-r-0 hover:bg-[#0e0e0e] lg:hover:bg-transparent transition-colors"
+        >
+          <div class="flex items-center justify-center gap-3 h-10 sm:h-12">
+            <!-- Монохромная иконка RuStore (3 наклонных прямоугольника) -->
+            <svg class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-200 group-hover:scale-105" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <g transform="skewY(14)">
+                <rect x="18" y="2" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.2" />
+                <rect x="11" y="5" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.2" />
+                <rect x="4" y="8" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.2" />
+              </g>
+            </svg>
+            <span class="font-pixel text-2xl sm:text-3xl text-white leading-none">1</span>
+          </div>
+          <span class="mt-3.5 text-xs text-[#888888] group-hover:text-white transition-colors">
+            игра в RuStore
+          </span>
+        </a>
+
+        <!-- Колонка 2: Полное название YouTube + монохромная иконка Play + @toochka_0o0 -->
+        <a
+          href="https://www.youtube.com/@toochka_0o0"
           target="_blank"
           rel="noopener noreferrer"
-          class="glass-panel rounded-2xl p-5 flex items-center gap-4 hover:bg-blue-600 hover:border-blue-600 hover:text-white shadow-glass hover:shadow-glow-blue hover:-translate-y-1 active:scale-95 transition-all group"
+          class="group flex flex-col items-center justify-center text-center py-8 px-4 border-b border-[#1a1a1a] lg:border-b-0 hover:bg-[#0e0e0e] lg:hover:bg-transparent transition-colors"
         >
-          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 group-hover:bg-white/20 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          <div class="flex items-center justify-center gap-2.5 h-10 sm:h-12">
+            <!-- Монохромная белая иконка YouTube Play -->
+            <svg class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-200 group-hover:scale-105" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <rect x="2" y="6" width="28" height="20" rx="5.5" fill="#ffffff" />
+              <polygon points="13,11.5 13,20.5 21.5,16" fill="#050505" />
             </svg>
+            <span class="font-silk text-lg sm:text-2xl font-bold tracking-tight text-white leading-none">
+              YouTube
+            </span>
           </div>
-          <div class="min-w-0">
-            <p class="font-bold text-slate-900 group-hover:text-white transition-colors">GitHub</p>
-            <p class="text-xs text-slate-500 group-hover:text-blue-100 truncate">Код и репозитории</p>
-          </div>
+          <span class="mt-3.5 text-xs text-[#888888] group-hover:text-white transition-colors">
+            @toochka_0o0
+          </span>
         </a>
 
-        <!-- Кнопка Telegram -->
+        <!-- Колонка 3: Полное название TikTok + монохромная иконка ноты со смещённой серой тенью + @toochka_0o0 -->
         <a
-          href="https://t.me/ваш_ник"
+          href="https://www.tiktok.com/@toochka_0o0"
           target="_blank"
           rel="noopener noreferrer"
-          class="glass-panel rounded-2xl p-5 flex items-center gap-4 hover:bg-sky-500 hover:border-sky-500 hover:text-white shadow-glass hover:shadow-glow-blue hover:-translate-y-1 active:scale-95 transition-all group"
+          class="group flex flex-col items-center justify-center text-center py-8 px-4 border-r border-[#1a1a1a] lg:border-r-0 hover:bg-[#0e0e0e] lg:hover:bg-transparent transition-colors"
         >
-          <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-500 group-hover:bg-white/20 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z" />
+          <div class="flex items-center justify-center gap-2.5 h-10 sm:h-12">
+            <!-- Монохромная иконка TikTok со смещённой светло-серой и тёмно-серой тенью -->
+            <svg class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-200 group-hover:scale-105" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <!-- Правая тёмно-серая смещённая тень -->
+              <path
+                d="M21.2 4.8h-3.6v14.8a3.6 3.6 0 1 1-2.5-3.4v-3.8a7.4 7.4 0 1 0 6.1 7.3V12a9.8 9.8 0 0 0 5.7 1.8v-3.6a6.2 6.2 0 0 1-5.7-5.4z"
+                fill="#525252"
+                transform="translate(1.3, 1.1)"
+              />
+              <!-- Левая светло-серая смещённая тень -->
+              <path
+                d="M21.2 4.8h-3.6v14.8a3.6 3.6 0 1 1-2.5-3.4v-3.8a7.4 7.4 0 1 0 6.1 7.3V12a9.8 9.8 0 0 0 5.7 1.8v-3.6a6.2 6.2 0 0 1-5.7-5.4z"
+                fill="#9e9e9e"
+                transform="translate(-1.2, -0.9)"
+              />
+              <!-- Основной чёткий белый символ ноты -->
+              <path
+                d="M21.2 4.8h-3.6v14.8a3.6 3.6 0 1 1-2.5-3.4v-3.8a7.4 7.4 0 1 0 6.1 7.3V12a9.8 9.8 0 0 0 5.7 1.8v-3.6a6.2 6.2 0 0 1-5.7-5.4z"
+                fill="#ffffff"
+              />
             </svg>
+            <span class="font-silk text-lg sm:text-2xl font-bold tracking-tight text-white leading-none">
+              TikTok
+            </span>
           </div>
-          <div class="min-w-0">
-            <p class="font-bold text-slate-900 group-hover:text-white transition-colors">Telegram</p>
-            <p class="text-xs text-slate-500 group-hover:text-sky-100 truncate">Написать лично</p>
-          </div>
+          <span class="mt-3.5 text-xs text-[#888888] group-hover:text-white transition-colors">
+            @toochka_0o0
+          </span>
         </a>
 
-        <!-- Кнопка YouTube -->
-        <a
-          href="https://youtube.com/@ваш_канал"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="glass-panel rounded-2xl p-5 flex items-center gap-4 hover:bg-blue-600 hover:border-blue-600 hover:text-white shadow-glass hover:shadow-glow-blue hover:-translate-y-1 active:scale-95 transition-all group"
-        >
-          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 group-hover:bg-white/20 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-            </svg>
-          </div>
-          <div class="min-w-0">
-            <p class="font-bold text-slate-900 group-hover:text-white transition-colors">YouTube</p>
-            <p class="text-xs text-slate-500 group-hover:text-blue-100 truncate">Видео и обзоры</p>
-          </div>
-        </a>
-
-        <!-- Кнопка Почта -->
-        <a
-          href="mailto:hello@toochka.fun"
-          class="glass-panel rounded-2xl p-5 flex items-center gap-4 hover:bg-sky-500 hover:border-sky-500 hover:text-white shadow-glass hover:shadow-glow-blue hover:-translate-y-1 active:scale-95 transition-all group"
-        >
-          <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 group-hover:bg-white/20 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </div>
-          <div class="min-w-0">
-            <p class="font-bold text-slate-900 group-hover:text-white transition-colors">Почта</p>
-            <p class="text-xs text-slate-500 group-hover:text-sky-100 truncate">hello@toochka.fun</p>
-          </div>
-        </a>
-      </div>
-
-      <!-- Кнопка «Скопировать адрес сайта» -->
-      <div class="flex justify-center">
+        <!-- Колонка 4: 95% визуал и оптимизация -->
         <button
           type="button"
-          data-copy-site
-          class="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white font-semibold text-sm sm:text-base shadow-glow-blue hover:-translate-y-0.5 active:scale-95 transition-all"
+          data-open-modal="manifestoModal"
+          class="group flex flex-col items-center justify-center text-center py-8 px-4 hover:bg-[#0e0e0e] lg:hover:bg-transparent transition-colors focus:outline-none"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          <span>Скопировать адрес сайта (toochka.fun)</span>
+          <div class="flex items-center justify-center h-10 sm:h-12">
+            <span class="font-pixel text-2xl sm:text-3xl text-white leading-none transition-transform duration-200 group-hover:scale-105">
+              95%
+            </span>
+          </div>
+          <span class="mt-3.5 text-xs text-[#888888] group-hover:text-white transition-colors">
+            визуал и оптимизация
+          </span>
         </button>
+
       </div>
     </section>
+
+    <!-- Пунктирный разделитель перед футером -->
+    <div class="dashed-divider"></div>
   </main>
 
-  <!-- ===================================================================== -->
-  <!-- 6. ФУТЕР                                                              -->
-  <!-- ===================================================================== -->
-  <footer class="relative z-10 mt-8 border-t border-blue-100 bg-white/70 backdrop-blur-md">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-      <div class="flex items-center gap-2 font-medium text-slate-700">
-        <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-        <span>© 2026 toochka.fun</span>
-      </div>
+  <!-- ======================================================================= -->
+  <!-- 6. ФУТЕР (МИНИМАЛИСТИЧНАЯ 3-ЧАСТНАЯ НИЖНЯЯ СТРОКА)                      -->
+  <!-- ======================================================================= -->
+  <footer class="max-w-6xl mx-auto px-5 sm:px-8 py-8 sm:py-10">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-5 text-[11px] uppercase tracking-[0.14em] text-[#888888]">
+      <!-- Левая часть: навигация по странице -->
       <div class="flex items-center gap-5">
-        <span class="text-xs sm:text-sm text-slate-500">Сделано для идей и проектов</span>
-        <a href="#home" class="inline-flex items-center gap-1 font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-          <span>Наверх</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
-          </svg>
+        <a href="#meimei-clicker" class="hover:text-white underline underline-offset-4 decoration-[#444444] hover:decoration-white transition-colors">
+          ИГРА
         </a>
+        <a href="#about" class="hover:text-white underline underline-offset-4 decoration-[#444444] hover:decoration-white transition-colors">
+          О НАС
+        </a>
+        <button
+          type="button"
+          data-open-modal="contactModal"
+          class="hover:text-white underline underline-offset-4 decoration-[#444444] hover:decoration-white transition-colors uppercase"
+        >
+          КОНТАКТЫ
+        </button>
+      </div>
+
+      <!-- Центр: копирайт и кликабельная почта для копирования -->
+      <div class="text-center text-[#666666] flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
+        <span>© TOOCHKA · ПОЧТА:</span>
+        <button
+          type="button"
+          data-copy-email
+          title="Нажми, чтобы скопировать почту"
+          class="text-[#cccccc] hover:text-white underline underline-offset-4 decoration-[#444444] hover:decoration-white transition-colors lowercase"
+        >
+          mr.almazik@vk.com
+        </button>
+      </div>
+
+      <!-- Правая часть: внешние ссылки с полными названиями -->
+      <div class="flex items-center gap-5">
+        <a href="https://www.youtube.com/@toochka_0o0" target="_blank" rel="noopener noreferrer" class="hover:text-white underline underline-offset-4 decoration-[#444444] hover:decoration-white transition-colors">
+          YOUTUBE
+        </a>
+        <a href="https://www.tiktok.com/@toochka_0o0" target="_blank" rel="noopener noreferrer" class="hover:text-white underline underline-offset-4 decoration-[#444444] hover:decoration-white transition-colors">
+          TIKTOK
+        </a>
+        <button
+          type="button"
+          data-open-modal="gameModal"
+          class="hover:text-white underline underline-offset-4 decoration-[#444444] hover:decoration-white transition-colors uppercase"
+        >
+          RUSTORE
+        </button>
       </div>
     </div>
   </footer>
 
-  <!-- ===================================================================== -->
-  <!-- МОДАЛЬНОЕ ОКНО С ПОДРОБНЫМ ОПИСАНИЕМ ПРОЕКТА                          -->
-  <!-- ===================================================================== -->
+  <!-- ======================================================================= -->
+  <!-- МОДАЛЬНОЕ ОКНО 1: ПОДРОБНОСТИ И СТАТУС «МЕЙ-МЕЙ КЛИКЕР»                 -->
+  <!-- ======================================================================= -->
   <div
-    id="projectModal"
-    class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
+    id="gameModal"
+    class="overlay-shell fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
     role="dialog"
     aria-modal="true"
-    aria-labelledby="modalTitle"
+    aria-labelledby="gameModalTitle"
   >
-    <div class="modal-content w-full max-w-lg rounded-3xl bg-white border border-blue-100 shadow-2xl p-6 sm:p-8 relative">
-      <!-- Кнопка закрытия -->
+    <div class="w-full max-w-lg border border-white bg-[#0a0a0a] p-6 sm:p-8 relative shadow-[0_0_40px_rgba(255,255,255,0.08)]">
       <button
-        id="closeModalBtn"
         type="button"
+        data-close-modal
         aria-label="Закрыть окно"
-        class="absolute top-5 right-5 w-9 h-9 rounded-xl bg-blue-50 hover:bg-blue-100 text-slate-600 hover:text-blue-700 flex items-center justify-center transition-colors"
+        class="absolute top-4 right-4 w-9 h-9 border border-[#262626] hover:border-white text-[#888888] hover:text-white text-lg flex items-center justify-center transition-colors"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        ×
       </button>
 
-      <!-- Статус проекта -->
-      <span id="modalBadge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100 mb-3">
-        Проект
-      </span>
-
-      <h3 id="modalTitle" class="text-2xl font-extrabold text-slate-900 mb-3">Название проекта</h3>
-      <p id="modalDesc" class="text-sm sm:text-base text-slate-600 leading-relaxed mb-5"></p>
-
-      <!-- Список особенностей -->
-      <div class="rounded-2xl bg-[#f4f8ff] border border-blue-100 p-4 mb-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2.5">Что внутри</p>
-        <ul id="modalFeatures" class="space-y-2 text-sm text-slate-700"></ul>
+      <div class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-[#888888] mb-3">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <g transform="skewY(14)">
+            <rect x="18" y="2" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.3" />
+            <rect x="11" y="5" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.3" />
+            <rect x="4" y="8" width="10" height="17" rx="2.5" fill="#ffffff" stroke="#050505" stroke-width="1.3" />
+          </g>
+        </svg>
+        <span>RUSTORE // ЕДИНСТВЕННАЯ ИГРА</span>
       </div>
 
-      <!-- Теги -->
-      <div id="modalTags" class="flex flex-wrap gap-2 mb-6"></div>
+      <h3 id="gameModalTitle" class="font-pixel text-lg sm:text-xl uppercase tracking-wider text-white">
+        МЕЙ-МЕЙ КЛИКЕР
+      </h3>
+      <div class="w-8 h-[2px] bg-white mt-3 mb-5"></div>
 
-      <!-- Кнопки внизу модалки -->
+      <p class="text-xs sm:text-sm text-[#cccccc] leading-relaxed mb-5">
+        Кликер про снежного барса Мей-Мей. Без рекламы, доната и интернета. Сейчас готовим финальную сборку к выходу в RuStore.
+      </p>
+
+      <!-- Прогресс готовности и особенности -->
+      <div class="border border-[#262626] bg-[#050505] p-4 space-y-3 text-xs mb-6">
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-[#888888]">ВИЗУАЛ И ОПТИМИЗАЦИЯ</span>
+          <span class="text-white font-semibold">95%</span>
+        </div>
+        <div class="w-full h-2 border border-[#262626] bg-[#0e0e0e] p-[1px]">
+          <div class="h-full bg-white" style="width: 95%;"></div>
+        </div>
+
+        <ul class="pt-2 space-y-1.5 text-[#aaaaaa] border-t border-dashed border-[#262626]">
+          <li>+ Главный герой — снежный барс Мей-Мей</li>
+          <li>+ 0% рекламы и 0% платных покупок</li>
+          <li>+ Работает полностью без интернета</li>
+          <li>+ Стабильный высокий FPS на Android</li>
+        </ul>
+      </div>
+
+      <p class="text-[11px] text-[#888888] mb-3 uppercase tracking-[0.14em]">
+        Следи за датой выхода в наших соцсетях:
+      </p>
+
       <div class="flex flex-col sm:flex-row gap-3">
         <a
-          id="modalLink"
-          href="#projects"
+          href="https://www.youtube.com/@toochka_0o0"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex-1 py-3 px-4 rounded-xl text-center text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 shadow-md transition-all"
+          class="btn-solid flex-1 py-3 px-4 text-center text-xs font-semibold uppercase tracking-[0.14em]"
         >
-          Открыть проект
+          YouTube @toochka_0o0 ↗
         </a>
-        <button
-          id="modalCloseSecondary"
-          type="button"
-          class="py-3 px-5 rounded-xl text-sm font-semibold text-slate-600 hover:text-blue-700 bg-slate-100 hover:bg-blue-50 transition-colors"
+        <a
+          href="https://www.tiktok.com/@toochka_0o0"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-ghost flex-1 py-3 px-4 text-center text-xs uppercase tracking-[0.14em]"
         >
-          Закрыть
+          TikTok @toochka_0o0 ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- МОДАЛЬНОЕ ОКНО 2: МАНИФЕСТ И ПРИНЦИПЫ TOOCHKA                           -->
+  <!-- ======================================================================= -->
+  <div
+    id="manifestoModal"
+    class="overlay-shell fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="manifestoTitle"
+  >
+    <div class="w-full max-w-lg border border-white bg-[#0a0a0a] p-6 sm:p-8 relative shadow-[0_0_40px_rgba(255,255,255,0.08)]">
+      <button
+        type="button"
+        data-close-modal
+        aria-label="Закрыть окно"
+        class="absolute top-4 right-4 w-9 h-9 border border-[#262626] hover:border-white text-[#888888] hover:text-white text-lg flex items-center justify-center transition-colors"
+      >
+        ×
+      </button>
+
+      <div class="text-[10px] uppercase tracking-[0.2em] text-[#888888] mb-3">
+        TOOCHKA // ПРИНЦИПЫ И СТЕК
+      </div>
+
+      <h3 id="manifestoTitle" class="font-pixel text-lg sm:text-xl uppercase tracking-wider text-white">
+        МАНИФЕСТ
+      </h3>
+      <div class="w-8 h-[2px] bg-white mt-3 mb-5"></div>
+
+      <div class="space-y-3.5 text-xs sm:text-sm text-[#aaaaaa] leading-relaxed">
+        <div class="border border-[#262626] bg-[#050505] p-3.5">
+          <p class="text-white font-semibold uppercase text-xs mb-1">01. ЧЕСТНАЯ МОДЕЛЬ</p>
+          <p class="text-xs text-[#888888]">Никакой навязчивой рекламы, лутбоксов и скрытых пейволлов. Запустил и играешь.</p>
+        </div>
+        <div class="border border-[#262626] bg-[#050505] p-3.5">
+          <p class="text-white font-semibold uppercase text-xs mb-1">02. ВИЗУАЛ И ОПТИМИЗАЦИЯ — 95%</p>
+          <p class="text-xs text-[#888888]">Чистая графика, минимальный вес и плавная работа даже на бюджетных смартфонах без разряда батареи.</p>
+        </div>
+        <div class="border border-[#262626] bg-[#050505] p-3.5">
+          <p class="text-white font-semibold uppercase text-xs mb-1">03. ОФЛАЙН-СВОБОДА</p>
+          <p class="text-xs text-[#888888]">Наши игры работают без постоянного подключения к сети — в дороге, метро или на даче.</p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <button
+          type="button"
+          data-close-modal
+          class="btn-ghost px-5 py-2.5 text-xs uppercase tracking-[0.16em]"
+        >
+          ПОНЯТНО
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ===================================================================== -->
-  <!-- TOAST-УВЕДОМЛЕНИЕ ПРИ КОПИРОВАНИИ ССЫЛКИ                              -->
-  <!-- ===================================================================== -->
+  <!-- ======================================================================= -->
+  <!-- МОДАЛЬНОЕ ОКНО 3: КОНТАКТЫ И ПРЯМАЯ СВЯЗЬ                               -->
+  <!-- ======================================================================= -->
   <div
-    id="toast"
-    role="status"
-    aria-live="polite"
-    class="toast-box fixed bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-slate-900 text-white shadow-xl border border-blue-500/30 max-w-[92vw]"
+    id="contactModal"
+    class="overlay-shell fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="contactModalTitle"
   >
-    <span class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-sky-400 flex items-center justify-center shrink-0">
-      <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-      </svg>
-    </span>
-    <span id="toastMessage" class="text-sm font-medium">Ссылка https://toochka.fun скопирована!</span>
+    <div class="w-full max-w-md border border-white bg-[#0a0a0a] p-6 sm:p-8 relative shadow-[0_0_40px_rgba(255,255,255,0.08)]">
+      <button
+        type="button"
+        data-close-modal
+        aria-label="Закрыть окно"
+        class="absolute top-4 right-4 w-9 h-9 border border-[#262626] hover:border-white text-[#888888] hover:text-white text-lg flex items-center justify-center transition-colors"
+      >
+        ×
+      </button>
+
+      <div class="text-[10px] uppercase tracking-[0.2em] text-[#888888] mb-3">
+        TOOCHKA // DIRECT CONTACT
+      </div>
+
+      <h3 id="contactModalTitle" class="font-pixel text-lg sm:text-xl uppercase tracking-wider text-white">
+        КОНТАКТЫ
+      </h3>
+      <div class="w-8 h-[2px] bg-white mt-3 mb-5"></div>
+
+      <p class="text-xs text-[#888888] leading-relaxed mb-5">
+        По вопросам сотрудничества, отзывов и предложений пиши на почту или заглядывай на наши каналы.
+      </p>
+
+      <div class="border border-[#262626] bg-[#050505] p-4 mb-5">
+        <span class="block text-[10px] uppercase tracking-[0.18em] text-[#666666] mb-1.5">ЭЛЕКТРОННАЯ ПОЧТА</span>
+        <p class="text-sm sm:text-base text-white font-semibold break-all mb-4">mr.almazik@vk.com</p>
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <button
+            type="button"
+            data-copy-email
+            class="btn-solid flex-1 py-2.5 px-3 text-xs font-semibold uppercase tracking-[0.14em]"
+          >
+            СКОПИРОВАТЬ
+          </button>
+          <a
+            href="mailto:mr.almazik@vk.com"
+            class="btn-ghost flex-1 py-2.5 px-3 text-center text-xs uppercase tracking-[0.14em]"
+          >
+            НАПИСАТЬ ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <a
+          href="https://www.youtube.com/@toochka_0o0"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="border border-[#262626] hover:border-white py-3 px-3 text-center text-[#cccccc] hover:text-white transition-colors"
+        >
+          YouTube ↗
+        </a>
+        <a
+          href="https://www.tiktok.com/@toochka_0o0"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="border border-[#262626] hover:border-white py-3 px-3 text-center text-[#cccccc] hover:text-white transition-colors"
+        >
+          TikTok ↗
+        </a>
+      </div>
+    </div>
   </div>
 
-  <!-- ===================================================================== -->
-  <!-- JAVASCRIPT: CANVAS-ТОЧКИ, ПЕЧАТАЮЩИЙСЯ ТЕКСТ, МОДАЛКИ И ЭФФЕКТЫ       -->
-  <!-- ===================================================================== -->
+  <!-- ======================================================================= -->
+  <!-- ПИКСЕЛЬНОЕ TOAST-УВЕДОМЛЕНИЕ ПРИ КОПИРОВАНИИ ПОЧТЫ                      -->
+  <!-- ======================================================================= -->
+  <div
+    id="pixelToast"
+    role="status"
+    aria-live="polite"
+    class="pixel-toast fixed bottom-6 left-1/2 z-50 border border-white bg-[#050505] px-5 py-3 shadow-[0_0_24px_rgba(255,255,255,0.18)] flex items-center gap-3 max-w-[92vw]"
+  >
+    <span class="w-2 h-2 bg-white shrink-0" aria-hidden="true"></span>
+    <span id="pixelToastText" class="text-xs tracking-[0.1em] text-white">
+      ПОЧТА СКОПИРОВАНА: mr.almazik@vk.com
+    </span>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- JAVASCRIPT: 3D CANVAS, СЕТКА 4×2, МЕНЮ, МОДАЛКИ, БУФЕР ОБМЕНА           -->
+  <!-- ======================================================================= -->
   <script>
     (function () {
       'use strict';
 
-      /* ===================================================================
-         НАСТРОЙКИ ДАННЫХ ПРОЕКТОВ — ПРОСТО ПОМЕНЯЙ ТЕКСТ И ССЫЛКИ ПОД СЕБЯ
-         =================================================================== */
-      const SITE_URL = 'https://toochka.fun';
+      const CONTACT_EMAIL = 'mr.almazik@vk.com';
 
-      const TYPING_PHRASES = [
-        'Игры и проекты',
-        'Код и эксперименты',
-        'Творчество в сети',
+      /* =====================================================================
+         1. ДАННЫЕ ДЛЯ ИНТЕРАКТИВНОЙ СЕТКИ 4×2 («ПОЧЕМУ И КАК?»)
+         8 чётких монохромных пиксель-арт иконок
+         ===================================================================== */
+      const PIXEL_TILES = [
+        {
+          code: '01/08',
+          label: 'Сделано с душой',
+          desc: 'Каждая механика и деталь прорабатывается вручную, без шаблонных решений.',
+          // 1. Пиксельное сердце (монохромные грани)
+          svg: `
+            <svg class="pixel-crisp w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 16 16" fill="none">
+              <rect x="4" y="3" width="3" height="2" fill="#a8a8a8" />
+              <rect x="9" y="3" width="3" height="2" fill="#a8a8a8" />
+              <rect x="3" y="5" width="10" height="4" fill="#cccccc" />
+              <rect x="4" y="9" width="8" height="2" fill="#9a9a9a" />
+              <rect x="6" y="11" width="4" height="2" fill="#777777" />
+              <rect x="7" y="13" width="2" height="1" fill="#666666" />
+              <rect x="5" y="5" width="2" height="3" fill="#4f4f4f" />
+              <rect x="9" y="5" width="2" height="3" fill="#4f4f4f" />
+              <rect x="7" y="4" width="2" height="6" fill="#e5e5e5" />
+            </svg>
+          `,
+        },
+        {
+          code: '02/08',
+          label: 'Атмосфера',
+          desc: 'Запоминающийся визуальный стиль, контраст и живой отклик интерфейса.',
+          // 2. Пиксельный призрак
+          svg: `
+            <svg class="pixel-crisp w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 16 16" fill="none">
+              <rect x="5" y="2" width="5" height="1" fill="#888888" />
+              <rect x="4" y="3" width="7" height="2" fill="#ffffff" />
+              <rect x="3" y="5" width="9" height="7" fill="#ffffff" />
+              <rect x="10" y="4" width="2" height="9" fill="#c4c4c4" />
+              <rect x="11" y="7" width="2" height="6" fill="#999999" />
+              <rect x="2" y="7" width="2" height="3" fill="#ffffff" />
+              <rect x="4" y="12" width="9" height="2" fill="#e5e5e5" />
+              <rect x="5" y="5" width="1.5" height="2" fill="#050505" />
+              <rect x="8" y="5" width="1.5" height="2" fill="#050505" />
+              <rect x="6.5" y="8" width="2" height="1" fill="#050505" />
+            </svg>
+          `,
+        },
+        {
+          code: '03/08',
+          label: 'Глубина идей',
+          desc: 'Экспериментируем с форматами и ищем свежие идеи вместо копирования.',
+          // 3. Пиксельная чёрная дыра / планета с кольцом
+          svg: `
+            <svg class="pixel-crisp w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 16 16" fill="none">
+              <rect x="5" y="3" width="6" height="1" fill="#888888" />
+              <rect x="4" y="4" width="8" height="2" fill="#ffffff" />
+              <rect x="4" y="10" width="8" height="2" fill="#ffffff" />
+              <rect x="5" y="12" width="6" height="1" fill="#777777" />
+              <rect x="5" y="5" width="6" height="6" fill="#050505" />
+              <rect x="1" y="7" width="6" height="1" fill="#cccccc" />
+              <rect x="2" y="8" width="12" height="1" fill="#ffffff" />
+              <rect x="9" y="9" width="6" height="1" fill="#cccccc" />
+              <rect x="2" y="3" width="1" height="1" fill="#777777" />
+              <rect x="13" y="4" width="1" height="1" fill="#ffffff" />
+              <rect x="12" y="13" width="1" height="1" fill="#888888" />
+            </svg>
+          `,
+        },
+        {
+          code: '04/08',
+          label: 'Инди-геймдев',
+          desc: 'Независимая разработка без компромиссов: делаем игры, в которые играем сами.',
+          // 4. Пиксельный пришелец (Space Invader)
+          svg: `
+            <svg class="pixel-crisp w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 16 16" fill="none">
+              <rect x="4" y="3" width="2" height="2" fill="#ffffff" />
+              <rect x="10" y="3" width="2" height="2" fill="#ffffff" />
+              <rect x="6" y="5" width="4" height="1" fill="#ffffff" />
+              <rect x="4" y="6" width="8" height="2" fill="#ffffff" />
+              <rect x="3" y="8" width="2" height="2" fill="#ffffff" />
+              <rect x="7" y="8" width="2" height="2" fill="#ffffff" />
+              <rect x="11" y="8" width="2" height="2" fill="#ffffff" />
+              <rect x="3" y="10" width="10" height="2" fill="#ffffff" />
+              <rect x="4" y="12" width="2" height="2" fill="#ffffff" />
+              <rect x="10" y="12" width="2" height="2" fill="#ffffff" />
+              <rect x="5" y="8" width="2" height="2" fill="#050505" />
+              <rect x="9" y="8" width="2" height="2" fill="#050505" />
+            </svg>
+          `,
+        },
+        {
+          code: '05/08',
+          label: 'Уважение ко времени',
+          desc: 'Никаких искусственных таймеров ожидания и рекламных пауз на 30 секунд.',
+          // 5. Пиксельные песочные часы
+          svg: `
+            <svg class="pixel-crisp w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 16 16" fill="none">
+              <rect x="3" y="2" width="10" height="1" fill="#ffffff" />
+              <rect x="4" y="3" width="1" height="3" fill="#ffffff" />
+              <rect x="11" y="3" width="1" height="3" fill="#ffffff" />
+              <rect x="5" y="6" width="2" height="1" fill="#ffffff" />
+              <rect x="9" y="6" width="2" height="1" fill="#ffffff" />
+              <rect x="7" y="7" width="2" height="2" fill="#ffffff" />
+              <rect x="5" y="9" width="2" height="1" fill="#ffffff" />
+              <rect x="9" y="9" width="2" height="1" fill="#ffffff" />
+              <rect x="4" y="10" width="1" height="3" fill="#ffffff" />
+              <rect x="11" y="10" width="1" height="3" fill="#ffffff" />
+              <rect x="7" y="10" width="2" height="3" fill="#ffffff" />
+              <rect x="6" y="12" width="4" height="1" fill="#ffffff" />
+              <rect x="3" y="13" width="10" height="1" fill="#ffffff" />
+            </svg>
+          `,
+        },
+        {
+          code: '06/08',
+          label: 'Оптимизация',
+          desc: '95% внимания уделяем лёгкости, быстрому старту и плавной работе.',
+          // 6. Пиксельная шестерёнка
+          svg: `
+            <svg class="pixel-crisp w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 16 16" fill="none">
+              <rect x="7" y="1" width="2" height="2" fill="#ffffff" />
+              <rect x="7" y="13" width="2" height="2" fill="#ffffff" />
+              <rect x="1" y="7" width="2" height="2" fill="#ffffff" />
+              <rect x="13" y="7" width="2" height="2" fill="#ffffff" />
+              <rect x="3" y="3" width="2" height="2" fill="#ffffff" />
+              <rect x="11" y="3" width="2" height="2" fill="#ffffff" />
+              <rect x="3" y="11" width="2" height="2" fill="#ffffff" />
+              <rect x="11" y="11" width="2" height="2" fill="#ffffff" />
+              <rect x="5" y="3" width="6" height="1" fill="#ffffff" />
+              <rect x="5" y="12" width="6" height="1" fill="#ffffff" />
+              <rect x="3" y="5" width="1" height="6" fill="#ffffff" />
+              <rect x="12" y="5" width="1" height="6" fill="#ffffff" />
+              <rect x="6" y="5" width="4" height="1" fill="#ffffff" />
+              <rect x="6" y="10" width="4" height="1" fill="#ffffff" />
+              <rect x="5" y="6" width="1" height="4" fill="#ffffff" />
+              <rect x="10" y="6" width="1" height="4" fill="#ffffff" />
+            </svg>
+          `,
+        },
+        {
+          code: '07/08',
+          label: 'Звук и вайб',
+          desc: 'Подбираем приятный саунд-дизайн и ритм для полного погружения.',
+          // 7. Пиксельные наушники
+          svg: `
+            <svg class="pixel-crisp w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 16 16" fill="none">
+              <rect x="6" y="3" width="5" height="1" fill="#888888" />
+              <rect x="5" y="4" width="2" height="1" fill="#a8a8a8" />
+              <rect x="10" y="4" width="2" height="2" fill="#cccccc" />
+              <rect x="4" y="5" width="2" height="3" fill="#888888" />
+              <rect x="11" y="6" width="2" height="3" fill="#b8b8b8" />
+              <rect x="3" y="8" width="3" height="4" fill="#9a9a9a" />
+              <rect x="4" y="9" width="2" height="2" fill="#666666" />
+              <rect x="7" y="8" width="5" height="5" fill="#cccccc" />
+              <rect x="8" y="9" width="3" height="3" fill="#ffffff" />
+              <rect x="8" y="12" width="3" height="1" fill="#888888" />
+            </svg>
+          `,
+        },
+        {
+          code: '08/08',
+          label: 'Космический кот',
+          desc: 'Спокойный талисман студии TOOCHKA среди бесконечного пиксельного космоса.',
+          // 8. Пиксельный сонный кот со звёздами
+          svg: `
+            <svg class="pixel-crisp w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 16 16" fill="none">
+              <rect x="2" y="2" width="1" height="1" fill="#777777" />
+              <rect x="13" y="3" width="1" height="1" fill="#ffffff" />
+              <rect x="3" y="13" width="1" height="1" fill="#888888" />
+              <rect x="6" y="4" width="2" height="1" fill="#ffffff" />
+              <rect x="10" y="4" width="2" height="1" fill="#ffffff" />
+              <rect x="5" y="5" width="1" height="3" fill="#ffffff" />
+              <rect x="8" y="5" width="2" height="1" fill="#ffffff" />
+              <rect x="12" y="5" width="1" height="6" fill="#ffffff" />
+              <rect x="2" y="8" width="3" height="1" fill="#ffffff" />
+              <rect x="2" y="9" width="1" height="2" fill="#ffffff" />
+              <rect x="3" y="10" width="2" height="1" fill="#ffffff" />
+              <rect x="5" y="11" width="8" height="1" fill="#ffffff" />
+              <rect x="7" y="8" width="2" height="1" fill="#ffffff" />
+              <rect x="10" y="8" width="2" height="1" fill="#ffffff" />
+            </svg>
+          `,
+        },
       ];
 
-      const PROJECTS_DATA = {
-        webapp: {
-          badge: 'Веб-приложение',
-          title: 'Веб-приложение',
-          description:
-            'Здесь будет описание твоего веб-приложения. Например: удобный трекер целей, заметки или дашборд, который работает прямо в браузере без установки и сохраняет данные локально.',
-          features: [
-            'Адаптивный интерфейс для телефона и компьютера',
-            'Мгновенная работа без перезагрузки страницы',
-            'Сохранение настроек и данных пользователя',
-          ],
-          tags: ['HTML / CSS', 'JavaScript', 'UI / UX'],
-          link: 'https://github.com/ваш-логин',
-        },
-        game: {
-          badge: 'Игровой проект',
-          title: 'Игровой проект',
-          description:
-            'Здесь можно рассказать о твоей игре: аркада на Canvas, головоломка или кликер с уровнями, физикой и таблицей рекордов, в которую можно сыграть прямо по ссылке.',
-          features: [
-            'Плавная графика 60 FPS и спецэффекты',
-            'Управление мышкой, клавиатурой и касаниями',
-            'Система очков и рекордов',
-          ],
-          tags: ['Canvas 2D', 'Анимации', 'Геймдев'],
-          link: 'https://github.com/ваш-логин',
-        },
-        tool: {
-          badge: 'Мини-инструмент',
-          title: 'Мини-инструмент',
-          description:
-            'Полезная веб-утилита на каждый день: генератор палитр, конвертер, таймер или помощник для учёбы и кода. Минимум лишнего — максимум пользы.',
-          features: [
-            'Запускается мгновенно без регистрации',
-            'Удобное копирование результата в один клик',
-            'Открытый исходный код на GitHub',
-          ],
-          tags: ['Быстро', 'Инструмент', 'Open Source'],
-          link: 'https://github.com/ваш-логин',
-        },
-      };
+      /* =====================================================================
+         2. ВЫСОКОПРОИЗВОДИТЕЛЬНАЯ 3D WIREFRAME-СЦЕНА (HTML5 CANVAS)
+            - Центральный граненый полупрозрачный икосаэдр/кристалл
+            - Плавающие изометрические каркасные кубы
+            - Мелкие светящиеся пиксельные частицы и звёзды
+            - Реакция на мышь и свайпы, автопауза вне экрана (95%+ оптимизация)
+         ===================================================================== */
+      function initHeroCanvas() {
+        const canvas = document.getElementById('heroCanvas');
+        const wrap = document.getElementById('heroCanvasWrap');
+        if (!canvas || !wrap) return;
 
-      /* ===================================================================
-         1. ИНТЕРАКТИВНЫЙ CANVAS-ФОН С ПЛАВАЮЩИМИ СИНИМИ ТОЧКАМИ
-         =================================================================== */
-      const canvas = document.getElementById('dotsCanvas');
-      const activeDotsEl = document.getElementById('activeDotsCount');
-      const clickWavesEl = document.getElementById('clickWavesCount');
-      const toggleSpeedBtn = document.getElementById('toggleSpeedBtn');
-      const speedBtnText = document.getElementById('speedBtnText');
-      const spawnWaveBtn = document.getElementById('spawnWaveBtn');
-      const resetDotsBtn = document.getElementById('resetDotsBtn');
-
-      let ctx = null;
-      let width = window.innerWidth;
-      let height = window.innerHeight;
-      let dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-      let dots = [];
-      let ripples = [];
-      let speedMultiplier = 1;
-      let waveCounter = 0;
-
-      const pointer = {
-        x: -9999,
-        y: -9999,
-        active: false,
-      };
-
-      // Вычисление оптимального числа точек под ширину экрана
-      function getBaseDotCount() {
-        if (width < 640) return 38;
-        if (width < 1024) return 55;
-        return 75;
-      }
-
-      // Создание одной точки
-      function createDot(x, y, isBurst = false) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = isBurst ? 1.4 + Math.random() * 2.4 : 0.25 + Math.random() * 0.55;
-        const colors = [
-          'rgba(37, 99, 235, 0.72)',  // королевский синий #2563eb
-          'rgba(14, 165, 233, 0.72)', // небесный #0ea5e9
-          'rgba(59, 130, 246, 0.58)', // мягкий синий
-        ];
-        return {
-          x: x !== undefined ? x : Math.random() * width,
-          y: y !== undefined ? y : Math.random() * height,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          radius: isBurst ? 2.2 + Math.random() * 2.6 : 2 + Math.random() * 2.4,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          isBurst: isBurst,
-          life: isBurst ? 1 : Infinity,
-        };
-      }
-
-      // Инициализация стартового набора точек
-      function initDots() {
-        dots = [];
-        const count = getBaseDotCount();
-        for (let i = 0; i < count; i++) {
-          dots.push(createDot());
+        let ctx;
+        try {
+          ctx = canvas.getContext('2d', { alpha: true });
+        } catch (err) {
+          return;
         }
-        updateCounters();
-      }
-
-      // Обновление счётчиков в интерактивной карточке
-      function updateCounters() {
-        if (activeDotsEl) activeDotsEl.textContent = dots.length;
-        if (clickWavesEl) clickWavesEl.textContent = waveCounter;
-      }
-
-      // Создание красивой волны и всплеска точек по координатам
-      function triggerRippleAndBurst(x, y) {
-        ripples.push({
-          x,
-          y,
-          radius: 6,
-          maxRadius: Math.min(width, height) < 640 ? 110 : 155,
-          alpha: 0.55,
-        });
-
-        // Добавляем 6 новых точек с плавным затуханием, ограничивая общий максимум
-        const maxTotalDots = getBaseDotCount() + 45;
-        for (let i = 0; i < 6; i++) {
-          if (dots.length < maxTotalDots) {
-            dots.push(createDot(x, y, true));
-          }
-        }
-
-        // Лёгкий импульс отталкивания ближайших точек для эффекта волны
-        for (let i = 0; i < dots.length; i++) {
-          const d = dots[i];
-          const dx = d.x - x;
-          const dy = d.y - y;
-          const dist = Math.hypot(dx, dy);
-          if (dist > 1 && dist < 140) {
-            const force = (140 - dist) / 140;
-            d.vx += (dx / dist) * force * 1.4;
-            d.vy += (dy / dist) * force * 1.4;
-          }
-        }
-
-        waveCounter += 1;
-        updateCounters();
-      }
-
-      // Изменение размеров холста при ресайзе окна
-      function resizeCanvas() {
-        if (!canvas || !ctx) return;
-        width = window.innerWidth;
-        height = window.innerHeight;
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';
-
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        // Если точек нет или экран сильно изменился — пересоздаём
-        if (dots.length === 0) {
-          initDots();
-        }
-      }
-
-      // Главный цикл отрисовки фона
-      function animateCanvas() {
         if (!ctx) return;
-        ctx.clearRect(0, 0, width, height);
 
-        const connectDist = width < 640 ? 105 : 135;
-        const pointerDist = 155;
+        let width = 360;
+        let height = 360;
+        let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-        // 1. Рисуем расходящиеся синие волны от кликов
-        for (let i = ripples.length - 1; i >= 0; i--) {
-          const r = ripples[i];
-          r.radius += 2.6 * (speedMultiplier > 1 ? 1.35 : 1);
-          r.alpha *= 0.955;
+        // Состояние видимости для экономии ресурсов процессора и батареи
+        let isInViewport = true;
+        let rafId = null;
 
-          ctx.beginPath();
-          ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(14, 165, 233, ${r.alpha.toFixed(3)})`;
-          ctx.lineWidth = 2;
-          ctx.stroke();
+        // Вращение и реакция на мышь / тач
+        const interaction = {
+          targetX: 0,
+          targetY: 0,
+          x: 0,
+          y: 0,
+          isDragging: false,
+          lastPointerX: 0,
+          lastPointerY: 0,
+          dragRotY: 0,
+          dragRotX: 0,
+        };
 
-          if (r.alpha < 0.02 || r.radius > r.maxRadius) {
-            ripples.splice(i, 1);
-          }
+        // Геометрия 3D-куба
+        const cubeVerts = [
+          [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+          [-1, -1,  1], [1, -1,  1], [1, 1,  1], [-1, 1,  1],
+        ];
+        const cubeEdges = [
+          [0, 1], [1, 2], [2, 3], [3, 0],
+          [4, 5], [5, 6], [6, 7], [7, 4],
+          [0, 4], [1, 5], [2, 6], [3, 7],
+        ];
+        const cubeFaces = [
+          [0, 1, 2, 3], [4, 5, 6, 7], [0, 1, 5, 4],
+          [2, 3, 7, 6], [1, 2, 6, 5], [0, 3, 7, 4],
+        ];
+
+        // Геометрия центрального кристалла (икосаэдра)
+        const phi = (1 + Math.sqrt(5)) / 2;
+        const rawIcoVerts = [
+          [-1,  phi,  0], [ 1,  phi,  0], [-1, -phi,  0], [ 1, -phi,  0],
+          [ 0, -1,  phi], [ 0,  1,  phi], [ 0, -1, -phi], [ 0,  1, -phi],
+          [ phi,  0, -1], [ phi,  0,  1], [-phi,  0, -1], [-phi,  0,  1],
+        ];
+        // Нормализация вершин кристалла к единичному радиусу
+        const icoVerts = rawIcoVerts.map(([x, y, z]) => {
+          const len = Math.hypot(x, y, z);
+          return [x / len, y / len, z / len];
+        });
+        const icoFaces = [
+          [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
+          [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
+          [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
+          [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1],
+        ];
+
+        // Плавающие каркасные кубы вокруг кристалла (в духе ex8.tech)
+        const floatingCubes = [
+          { ox: -102, oy: -48, oz:  30, size: 28, rx: 0.5, ry: 0.7, vx:  0.007, vy:  0.010, phase: 0.2 },
+          { ox: -62,  oy:  74, oz:  45, size: 32, rx: 0.2, ry: 1.1, vx: -0.006, vy:  0.009, phase: 1.7 },
+          { ox:  16,  oy:  96, oz: -10, size: 24, rx: 1.0, ry: 0.4, vx:  0.008, vy: -0.007, phase: 2.9 },
+          { ox: -108, oy:  34, oz: -35, size: 20, rx: 0.8, ry: 0.2, vx: -0.009, vy: -0.008, phase: 4.1 },
+          { ox:  86,  oy:  76, oz:  20, size: 17, rx: 0.3, ry: 0.9, vx:  0.011, vy:  0.009, phase: 5.2 },
+        ];
+
+        // Пиксельные частицы / звёзды
+        const particles = Array.from({ length: 56 }, () => ({
+          x: (Math.random() - 0.5) * 2,
+          y: (Math.random() - 0.5) * 2,
+          depth: 0.4 + Math.random() * 0.9,
+          size: Math.random() > 0.72 ? 3 : 2,
+          alpha: 0.22 + Math.random() * 0.72,
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.8 + Math.random() * 1.8,
+        }));
+
+        function resize() {
+          const rect = wrap.getBoundingClientRect();
+          width = Math.max(240, Math.floor(rect.width));
+          height = Math.max(240, Math.floor(rect.height));
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          canvas.style.width = width + 'px';
+          canvas.style.height = height + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
 
-        // 2. Обновляем и рисуем точки
-        let removedAny = false;
-        for (let i = dots.length - 1; i >= 0; i--) {
-          const d = dots[i];
+        function rotate3D(p, ax, ay, az) {
+          const cosX = Math.cos(ax), sinX = Math.sin(ax);
+          const cosY = Math.cos(ay), sinY = Math.sin(ay);
+          const cosZ = Math.cos(az), sinZ = Math.sin(az);
 
-          // Мягкое притяжение к курсору/пальцу
-          if (pointer.active) {
-            const dx = pointer.x - d.x;
-            const dy = pointer.y - d.y;
-            const dist = Math.hypot(dx, dy);
-            if (dist > 12 && dist < pointerDist) {
-              const pull = (pointerDist - dist) / pointerDist;
-              d.vx += (dx / dist) * pull * 0.045;
-              d.vy += (dy / dist) * pull * 0.045;
-            }
-          }
-
-          // Ограничение максимальной скорости (чтобы точки двигались плавно)
-          const currentSpeed = Math.hypot(d.vx, d.vy);
-          const maxSpeed = d.isBurst ? 2.6 : 1.1;
-          if (currentSpeed > maxSpeed) {
-            d.vx *= 0.96;
-            d.vy *= 0.96;
-          }
-
-          d.x += d.vx * speedMultiplier;
-          d.y += d.vy * speedMultiplier;
-
-          // Отскок от краёв экрана
-          if (d.x < 0) { d.x = 0; d.vx = Math.abs(d.vx); }
-          if (d.x > width) { d.x = width; d.vx = -Math.abs(d.vx); }
-          if (d.y < 0) { d.y = 0; d.vy = Math.abs(d.vy); }
-          if (d.y > height) { d.y = height; d.vy = -Math.abs(d.vy); }
-
-          // Всплесковые точки постепенно растворяются через ~8 секунд
-          if (d.isBurst) {
-            d.life -= 0.0028;
-            if (d.life <= 0) {
-              dots.splice(i, 1);
-              removedAny = true;
-              continue;
-            }
-          }
-
-          // Рисуем саму точку
-          ctx.save();
-          if (d.isBurst) ctx.globalAlpha = Math.max(0, d.life);
-          ctx.beginPath();
-          ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
-          ctx.fillStyle = d.color;
-          ctx.fill();
-          ctx.restore();
+          // Вращение вокруг X
+          const y1 = p[1] * cosX - p[2] * sinX;
+          const z1 = p[1] * sinX + p[2] * cosX;
+          // Вращение вокруг Y
+          const x2 = p[0] * cosY + z1 * sinY;
+          const z2 = -p[0] * sinY + z1 * cosY;
+          // Вращение вокруг Z
+          const x3 = x2 * cosZ - y1 * sinZ;
+          const y3 = x2 * sinZ + y1 * cosZ;
+          return [x3, y3, z2];
         }
 
-        if (removedAny) updateCounters();
+        function drawCrystal(cx, cy, time, scale) {
+          const r = 64 * scale;
+          const centerX = cx + 44 * scale + interaction.x * 10;
+          const centerY = cy - 42 * scale + Math.sin(time * 1.1) * 6 * scale + interaction.y * 10;
 
-        // 3. Соединяем близкие точки тонкими синими линиями
-        for (let i = 0; i < dots.length; i++) {
-          const a = dots[i];
-          for (let j = i + 1; j < dots.length; j++) {
-            const b = dots[j];
-            const dx = a.x - b.x;
-            const dy = a.y - b.y;
-            const distSq = dx * dx + dy * dy;
+          const rotX = time * 0.34 + interaction.y * 0.45 + interaction.dragRotX;
+          const rotY = time * 0.48 + interaction.x * 0.55 + interaction.dragRotY;
+          const rotZ = time * 0.16;
 
-            if (distSq < connectDist * connectDist) {
-              const dist = Math.sqrt(distSq);
-              const opacity = (1 - dist / connectDist) * 0.24 * Math.min(a.life, b.life, 1);
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.strokeStyle = `rgba(37, 99, 235, ${opacity.toFixed(3)})`;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
-          }
-
-          // Соединение с курсором
-          if (pointer.active) {
-            const dx = a.x - pointer.x;
-            const dy = a.y - pointer.y;
-            const distSq = dx * dx + dy * dy;
-            if (distSq < pointerDist * pointerDist) {
-              const dist = Math.sqrt(distSq);
-              const opacity = (1 - dist / pointerDist) * 0.34;
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(pointer.x, pointer.y);
-              ctx.strokeStyle = `rgba(14, 165, 233, ${opacity.toFixed(3)})`;
-              ctx.lineWidth = 1.1;
-              ctx.stroke();
-            }
-          }
-        }
-
-        requestAnimationFrame(animateCanvas);
-      }
-
-      // Безопасный запуск Canvas с обработкой ошибок
-      try {
-        if (canvas && canvas.getContext) {
-          ctx = canvas.getContext('2d');
-          resizeCanvas();
-          initDots();
-          window.addEventListener('resize', resizeCanvas);
-          window.addEventListener('load', () => {
-            resizeCanvas();
+          const transformed = icoVerts.map((v) => {
+            const p = rotate3D(v, rotX, rotY, rotZ);
+            const fov = 320;
+            const factor = fov / (fov + p[2] * r + 170);
+            return {
+              x: centerX + p[0] * r * factor,
+              y: centerY + p[1] * r * factor,
+              z: p[2],
+              raw: p,
+            };
           });
-          requestAnimationFrame(animateCanvas);
+
+          // Сортировка граней от дальних к ближним (алгоритм художника)
+          const sortedFaces = icoFaces.map((face) => {
+            const a = transformed[face[0]];
+            const b = transformed[face[1]];
+            const c = transformed[face[2]];
+            const avgZ = (a.z + b.z + c.z) / 3;
+
+            // Вектор нормали грани для монохромного «стеклянного» освещения
+            const ux = b.raw[0] - a.raw[0], uy = b.raw[1] - a.raw[1], uz = b.raw[2] - a.raw[2];
+            const vx = c.raw[0] - a.raw[0], vy = c.raw[1] - a.raw[1], vz = c.raw[2] - a.raw[2];
+            const nx = uy * vz - uz * vy;
+            const ny = uz * vx - ux * vz;
+            const nz = ux * vy - uy * vx;
+            const nLen = Math.hypot(nx, ny, nz) || 1;
+            // Направленный свет сверху-слева-спереди
+            const light = Math.max(0, (nx * -0.45 + ny * -0.55 + nz * 0.7) / nLen);
+
+            return { a, b, c, avgZ, light };
+          }).sort((f1, f2) => f1.avgZ - f2.avgZ);
+
+          // Рисуем грани с полупрозрачными оттенками белого и серыми гранями
+          sortedFaces.forEach(({ a, b, c, avgZ, light }) => {
+            const fillAlpha = avgZ > 0
+              ? (0.06 + light * 0.28)
+              : (0.02 + light * 0.08);
+            const strokeAlpha = avgZ > 0
+              ? (0.35 + light * 0.55)
+              : 0.16;
+
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.lineTo(c.x, c.y);
+            ctx.closePath();
+
+            ctx.fillStyle = `rgba(255, 255, 255, ${fillAlpha.toFixed(3)})`;
+            ctx.fill();
+
+            ctx.strokeStyle = `rgba(255, 255, 255, ${strokeAlpha.toFixed(3)})`;
+            ctx.lineWidth = avgZ > 0 ? 1.1 : 0.7;
+            ctx.stroke();
+          });
+
+          // Пиксельные световые акценты в передних вершинах кристалла
+          transformed.forEach((v) => {
+            if (v.z > 0.15) {
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+              ctx.fillRect(Math.round(v.x) - 1, Math.round(v.y) - 1, 2, 2);
+            }
+          });
         }
-      } catch (err) {
-        console.error('Ошибка инициализации Canvas:', err);
-      }
 
-      // События мыши и касаний для интерактивного фона
-      window.addEventListener('mousemove', (e) => {
-        pointer.x = e.clientX;
-        pointer.y = e.clientY;
-        pointer.active = true;
-      });
+        function drawCube(cube, cx, cy, time, scale) {
+          cube.rx += cube.vx;
+          cube.ry += cube.vy;
 
-      window.addEventListener('mouseleave', () => {
-        pointer.active = false;
-      });
+          const s = cube.size * scale;
+          const posX = cx + cube.ox * scale + interaction.x * 16;
+          const posY = cy + cube.oy * scale + Math.sin(time * 1.25 + cube.phase) * 7 * scale + interaction.y * 16;
 
-      window.addEventListener(
-        'touchmove',
-        (e) => {
-          if (e.touches && e.touches.length > 0) {
-            pointer.x = e.touches[0].clientX;
-            pointer.y = e.touches[0].clientY;
-            pointer.active = true;
+          const projected = cubeVerts.map((v) => {
+            const r = rotate3D(
+              v,
+              cube.rx + interaction.y * 0.35 + interaction.dragRotX * 0.6,
+              cube.ry + interaction.x * 0.35 + interaction.dragRotY * 0.6,
+              0
+            );
+            const fov = 290;
+            const factor = fov / (fov + r[2] * s + 190);
+            return [posX + r[0] * s * factor, posY + r[1] * s * factor, r[2]];
+          });
+
+          // Лёгкая полупрозрачная заливка самой ближней грани
+          let frontFace = cubeFaces[0];
+          let maxZ = -Infinity;
+          cubeFaces.forEach((f) => {
+            const zSum = projected[f[0]][2] + projected[f[1]][2] + projected[f[2]][2] + projected[f[3]][2];
+            if (zSum > maxZ) {
+              maxZ = zSum;
+              frontFace = f;
+            }
+          });
+
+          ctx.beginPath();
+          ctx.moveTo(projected[frontFace[0]][0], projected[frontFace[0]][1]);
+          ctx.lineTo(projected[frontFace[1]][0], projected[frontFace[1]][1]);
+          ctx.lineTo(projected[frontFace[2]][0], projected[frontFace[2]][1]);
+          ctx.lineTo(projected[frontFace[3]][0], projected[frontFace[3]][1]);
+          ctx.closePath();
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+          ctx.fill();
+
+          // Чёткие каркасные рёбра
+          ctx.lineWidth = 1;
+          cubeEdges.forEach(([i, j]) => {
+            const p1 = projected[i];
+            const p2 = projected[j];
+            const alpha = Math.max(0.2, Math.min(0.85, 0.48 + (p1[2] + p2[2]) * 0.18));
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha.toFixed(2)})`;
+            ctx.beginPath();
+            ctx.moveTo(p1[0], p1[1]);
+            ctx.lineTo(p2[0], p2[1]);
+            ctx.stroke();
+          });
+
+          // Маленькие пиксельные маркеры вершин
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.72)';
+          projected.forEach((p) => {
+            ctx.fillRect(Math.round(p[0]) - 1, Math.round(p[1]) - 1, 2, 2);
+          });
+        }
+
+        const startTimestamp = performance.now();
+
+        function renderFrame(now) {
+          if (!isInViewport || document.hidden) {
+            rafId = null;
+            return;
           }
-        },
-        { passive: true }
-      );
 
-      window.addEventListener('touchend', () => {
-        pointer.active = false;
-      });
+          const time = (now - startTimestamp) * 0.001;
+          ctx.clearRect(0, 0, width, height);
 
-      // Клик в свободном месте запускает волну и новые точки
-      document.addEventListener('click', (e) => {
-        // Не дублируем волну, если клик был по кнопке управления волнами или закрытию модалки
-        if (e.target.closest('#spawnWaveBtn') || e.target.closest('#resetDotsBtn')) return;
-        triggerRippleAndBurst(e.clientX, e.clientY);
-      });
+          // Плавное сглаживание реакции на указатель
+          interaction.x += (interaction.targetX - interaction.x) * 0.07;
+          interaction.y += (interaction.targetY - interaction.y) * 0.07;
 
-      // Кнопка «Ускорить точки» в шапке
-      if (toggleSpeedBtn) {
-        toggleSpeedBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (speedMultiplier === 1) {
-            speedMultiplier = 2.6;
-            speedBtnText.textContent = 'Спокойный фон';
-            toggleSpeedBtn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-            toggleSpeedBtn.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-200/80');
-            const svg = toggleSpeedBtn.querySelector('svg');
-            if (svg) svg.classList.replace('text-blue-600', 'text-white');
+          const cx = width / 2;
+          const cy = height / 2;
+          const scale = Math.min(width, height) / 340;
+
+          // 1. Мерцающие пиксельные звёзды и частицы
+          particles.forEach((pt) => {
+            const px = cx + pt.x * (width * 0.48) - interaction.x * 10 * pt.depth;
+            const py = cy + pt.y * (height * 0.48) - interaction.y * 10 * pt.depth;
+            const twinkle = 0.32 + 0.68 * Math.abs(Math.sin(time * pt.speed + pt.phase));
+            ctx.fillStyle = `rgba(255, 255, 255, ${(pt.alpha * twinkle).toFixed(2)})`;
+            ctx.fillRect(Math.round(px), Math.round(py), pt.size, pt.size);
+          });
+
+          // 2. Дальние кубы
+          floatingCubes.forEach((cube) => {
+            if (cube.oz < 0) drawCube(cube, cx, cy, time, scale);
+          });
+
+          // 3. Центральный кристалл (икосаэдр)
+          drawCrystal(cx, cy, time, scale);
+
+          // 4. Ближние кубы
+          floatingCubes.forEach((cube) => {
+            if (cube.oz >= 0) drawCube(cube, cx, cy, time, scale);
+          });
+
+          rafId = requestAnimationFrame(renderFrame);
+        }
+
+        function startLoop() {
+          if (!rafId && isInViewport && !document.hidden) {
+            rafId = requestAnimationFrame(renderFrame);
+          }
+        }
+
+        function stopLoop() {
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+          }
+        }
+
+        // Автопауза вне зоны видимости (IntersectionObserver)
+        if ('IntersectionObserver' in window) {
+          const visObserver = new IntersectionObserver(
+            (entries) => {
+              isInViewport = entries[0].isIntersecting;
+              if (isInViewport) {
+                startLoop();
+              } else {
+                stopLoop();
+              }
+            },
+            { threshold: 0.05 }
+          );
+          visObserver.observe(wrap);
+        }
+
+        // Автопауза при переключении вкладки браузера
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            stopLoop();
           } else {
-            speedMultiplier = 1;
-            speedBtnText.textContent = 'Ускорить точки';
-            toggleSpeedBtn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
-            toggleSpeedBtn.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-200/80');
-            const svg = toggleSpeedBtn.querySelector('svg');
-            if (svg) svg.classList.replace('text-white', 'text-blue-600');
+            startLoop();
           }
         });
-      }
 
-      // Кнопка «Создать всплеск» внутри Hero-карточки
-      if (spawnWaveBtn) {
-        spawnWaveBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const randX = width * (0.2 + Math.random() * 0.6);
-          const randY = height * (0.2 + Math.random() * 0.6);
-          triggerRippleAndBurst(randX, randY);
-        });
-      }
+        // Интерактивность мышью (наведение и перетаскивание)
+        wrap.addEventListener('mousemove', (e) => {
+          const rect = wrap.getBoundingClientRect();
+          interaction.targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+          interaction.targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
 
-      // Кнопка «Сброс» внутри Hero-карточки
-      if (resetDotsBtn) {
-        resetDotsBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          waveCounter = 0;
-          ripples = [];
-          initDots();
-          showToast('Фон обновлён до стандартного состояния');
-        });
-      }
-
-      /* ===================================================================
-         2. АНИМАЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА В ПОДЗАГОЛОВКЕ
-         =================================================================== */
-      const typedEl = document.getElementById('typedText');
-      let phraseIdx = 0;
-      let charIdx = 0;
-      let isDeleting = false;
-
-      function runTypewriter() {
-        if (!typedEl) return;
-        const currentPhrase = TYPING_PHRASES[phraseIdx];
-
-        if (!isDeleting) {
-          typedEl.textContent = currentPhrase.slice(0, charIdx + 1);
-          charIdx++;
-          if (charIdx === currentPhrase.length) {
-            isDeleting = true;
-            setTimeout(runTypewriter, 1800); // Пауза после полного набора фразы
-            return;
+          if (interaction.isDragging) {
+            interaction.dragRotY += (e.clientX - interaction.lastPointerX) * 0.012;
+            interaction.dragRotX += (e.clientY - interaction.lastPointerY) * 0.012;
+            interaction.lastPointerX = e.clientX;
+            interaction.lastPointerY = e.clientY;
           }
-          setTimeout(runTypewriter, 75);
-        } else {
-          typedEl.textContent = currentPhrase.slice(0, charIdx - 1);
-          charIdx--;
-          if (charIdx === 0) {
-            isDeleting = false;
-            phraseIdx = (phraseIdx + 1) % TYPING_PHRASES.length;
-            setTimeout(runTypewriter, 350);
-            return;
+        });
+
+        wrap.addEventListener('mousedown', (e) => {
+          interaction.isDragging = true;
+          interaction.lastPointerX = e.clientX;
+          interaction.lastPointerY = e.clientY;
+        });
+
+        window.addEventListener('mouseup', () => {
+          interaction.isDragging = false;
+        });
+
+        wrap.addEventListener('mouseleave', () => {
+          interaction.isDragging = false;
+          interaction.targetX = 0;
+          interaction.targetY = 0;
+        });
+
+        // Интерактивность касаниями (тач-драг на Android / iOS)
+        wrap.addEventListener('touchstart', (e) => {
+          if (e.touches && e.touches[0]) {
+            interaction.isDragging = true;
+            interaction.lastPointerX = e.touches[0].clientX;
+            interaction.lastPointerY = e.touches[0].clientY;
           }
-          setTimeout(runTypewriter, 42);
+        }, { passive: true });
+
+        wrap.addEventListener('touchmove', (e) => {
+          if (e.touches && e.touches[0]) {
+            const touch = e.touches[0];
+            const rect = wrap.getBoundingClientRect();
+            interaction.targetX = ((touch.clientX - rect.left) / rect.width - 0.5) * 2;
+            interaction.targetY = ((touch.clientY - rect.top) / rect.height - 0.5) * 2;
+            if (interaction.isDragging) {
+              interaction.dragRotY += (touch.clientX - interaction.lastPointerX) * 0.014;
+              interaction.dragRotX += (touch.clientY - interaction.lastPointerY) * 0.014;
+              interaction.lastPointerX = touch.clientX;
+              interaction.lastPointerY = touch.clientY;
+            }
+          }
+        }, { passive: true });
+
+        wrap.addEventListener('touchend', () => {
+          interaction.isDragging = false;
+          interaction.targetX = 0;
+          interaction.targetY = 0;
+        });
+
+        resize();
+        window.addEventListener('resize', resize);
+        startLoop();
+      }
+
+      /* =====================================================================
+         3. ИНИЦИАЛИЗАЦИЯ СЕТКИ 4×2 В РАЗДЕЛЕ «ПОЧЕМУ И КАК?»
+         ===================================================================== */
+      function initPixelGrid() {
+        const grid = document.getElementById('pixelGrid');
+        const counterEl = document.getElementById('tileCounter');
+        const labelEl = document.getElementById('tileLabel');
+        const descEl = document.getElementById('tileDesc');
+        if (!grid) return;
+
+        function activateTile(index) {
+          const item = PIXEL_TILES[index] || PIXEL_TILES[0];
+          if (counterEl) counterEl.textContent = `[${item.code}]`;
+          if (labelEl) labelEl.textContent = item.label;
+          if (descEl) descEl.textContent = item.desc;
+
+          grid.querySelectorAll('.pixel-tile').forEach((tile, idx) => {
+            tile.classList.toggle('is-active', idx === index);
+          });
         }
-      }
-      runTypewriter();
 
-      /* ===================================================================
-         3. ПЛАВНОЕ ПОЯВЛЕНИЕ БЛОКОВ ПРИ ПРОКРУТКЕ (IntersectionObserver)
-         =================================================================== */
-      const revealEls = document.querySelectorAll('.reveal');
-      if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver(
+        PIXEL_TILES.forEach((item, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pixel-tile aspect-square w-full flex items-center justify-center p-2.5 sm:p-3 focus:outline-none';
+          btn.setAttribute('aria-label', item.label);
+          btn.innerHTML = item.svg;
+
+          btn.addEventListener('mouseenter', () => activateTile(idx));
+          btn.addEventListener('focus', () => activateTile(idx));
+          btn.addEventListener('click', () => activateTile(idx));
+
+          grid.appendChild(btn);
+        });
+
+        activateTile(0);
+      }
+
+      /* =====================================================================
+         4. УПРАВЛЕНИЕ ПОЛНОЭКРАННЫМ МЕНЮ И МОДАЛЬНЫМИ ОКНАМИ
+         ===================================================================== */
+      function initOverlays() {
+        const menuOverlay = document.getElementById('menuOverlay');
+        const menuOpenBtn = document.getElementById('menuOpenBtn');
+        const menuCloseBtn = document.getElementById('menuCloseBtn');
+        const modals = document.querySelectorAll('#gameModal, #manifestoModal, #contactModal');
+
+        function closeAllModals() {
+          modals.forEach((m) => m.classList.remove('is-open'));
+        }
+
+        function updateScrollLock() {
+          const anyOpen =
+            (menuOverlay && menuOverlay.classList.contains('is-open')) ||
+            Array.from(modals).some((m) => m.classList.contains('is-open'));
+          document.body.style.overflow = anyOpen ? 'hidden' : '';
+        }
+
+        function openMenu() {
+          if (!menuOverlay) return;
+          closeAllModals();
+          menuOverlay.classList.add('is-open');
+          if (menuOpenBtn) menuOpenBtn.setAttribute('aria-expanded', 'true');
+          updateScrollLock();
+        }
+
+        function closeMenu() {
+          if (!menuOverlay) return;
+          menuOverlay.classList.remove('is-open');
+          if (menuOpenBtn) menuOpenBtn.setAttribute('aria-expanded', 'false');
+          updateScrollLock();
+        }
+
+        function openModalById(modalId) {
+          const target = document.getElementById(modalId);
+          if (!target) return;
+          closeMenu();
+          closeAllModals();
+          target.classList.add('is-open');
+          updateScrollLock();
+        }
+
+        if (menuOpenBtn) menuOpenBtn.addEventListener('click', openMenu);
+        if (menuCloseBtn) menuCloseBtn.addEventListener('click', closeMenu);
+
+        document.querySelectorAll('.menu-nav-link, .menu-action-close').forEach((el) => {
+          el.addEventListener('click', closeMenu);
+        });
+
+        // Открытие модальных окон по data-open-modal
+        document.querySelectorAll('[data-open-modal]').forEach((trigger) => {
+          trigger.addEventListener('click', () => {
+            openModalById(trigger.getAttribute('data-open-modal'));
+          });
+        });
+
+        // Закрытие модальных окон по кнопкам и клику по фону
+        document.querySelectorAll('[data-close-modal]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            closeAllModals();
+            updateScrollLock();
+          });
+        });
+
+        modals.forEach((modal) => {
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              closeAllModals();
+              updateScrollLock();
+            }
+          });
+        });
+
+        // Закрытие по клавише Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeMenu();
+            closeAllModals();
+            updateScrollLock();
+          }
+        });
+      }
+
+      /* =====================================================================
+         5. КОПИРОВАНИЕ ПОЧТЫ В БУФЕР ОБМЕНА И TOAST-УВЕДОМЛЕНИЕ
+         ===================================================================== */
+      function initClipboard() {
+        const toast = document.getElementById('pixelToast');
+        const toastText = document.getElementById('pixelToastText');
+        let toastTimer = null;
+
+        function showToast(message) {
+          if (!toast || !toastText) return;
+          toastText.textContent = message;
+          toast.classList.add('is-shown');
+          if (toastTimer) clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => {
+            toast.classList.remove('is-shown');
+          }, 2800);
+        }
+
+        function copyEmailAddress() {
+          try {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = CONTACT_EMAIL;
+            tempInput.setAttribute('readonly', '');
+            tempInput.style.position = 'fixed';
+            tempInput.style.top = '-9999px';
+            tempInput.style.left = '-9999px';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, tempInput.value.length);
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast(`ПОЧТА СКОПИРОВАНА: ${CONTACT_EMAIL}`);
+          } catch (err) {
+            showToast(`ПОЧТА: ${CONTACT_EMAIL}`);
+          }
+        }
+
+        document.querySelectorAll('[data-copy-email]').forEach((el) => {
+          el.addEventListener('click', copyEmailAddress);
+        });
+      }
+
+      /* =====================================================================
+         6. ПЛАВНОЕ ПОЯВЛЕНИЕ СЕКЦИЙ ПРИ ПРОКРУТКЕ
+         ===================================================================== */
+      function initScrollReveal() {
+        const items = document.querySelectorAll('.reveal');
+        if (!('IntersectionObserver' in window)) {
+          items.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
+        const revealObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
+                entry.target.classList.add('is-visible');
+                revealObserver.unobserve(entry.target);
               }
             });
           },
-          { threshold: 0.12 }
+          { threshold: 0.08 }
         );
-        revealEls.forEach((el) => observer.observe(el));
-      } else {
-        // Резервный вариант для старых браузеров
-        revealEls.forEach((el) => el.classList.add('visible'));
+        items.forEach((el) => revealObserver.observe(el));
       }
 
-      /* ===================================================================
-         4. 3D-НАКЛОН КАРТОЧЕК ПРИ НАВЕДЕНИИ МЫШИ (НА ПК)
-         =================================================================== */
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      if (!isTouchDevice) {
-        document.querySelectorAll('.tilt-card').forEach((card) => {
-          card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            const rotateX = ((y - centerY) / centerY) * -4.5;
-            const rotateY = ((x - centerX) / centerX) * 4.5;
-
-            card.style.transform = `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
-          });
-
-          card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-          });
-        });
-      }
-
-      /* ===================================================================
-         5. МОБИЛЬНОЕ МЕНЮ В ШАПКЕ
-         =================================================================== */
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-      const menuIconOpen = document.getElementById('menuIconOpen');
-      const menuIconClose = document.getElementById('menuIconClose');
-
-      function toggleMobileMenu(forceClose = false) {
-        if (!mobileMenu) return;
-        const shouldClose = forceClose || !mobileMenu.classList.contains('hidden');
-        if (shouldClose) {
-          mobileMenu.classList.add('hidden');
-          menuIconOpen.classList.remove('hidden');
-          menuIconClose.classList.add('hidden');
-        } else {
-          mobileMenu.classList.remove('hidden');
-          menuIconOpen.classList.add('hidden');
-          menuIconClose.classList.remove('hidden');
-        }
-      }
-
-      if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          toggleMobileMenu();
-        });
-      }
-
-      document.querySelectorAll('.mobile-nav-link').forEach((link) => {
-        link.addEventListener('click', () => toggleMobileMenu(true));
-      });
-
-      /* ===================================================================
-         6. МОДАЛЬНОЕ ОКНО ДЛЯ ПРОЕКТОВ
-         =================================================================== */
-      const projectModal = document.getElementById('projectModal');
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      const modalCloseSecondary = document.getElementById('modalCloseSecondary');
-      const modalBadge = document.getElementById('modalBadge');
-      const modalTitle = document.getElementById('modalTitle');
-      const modalDesc = document.getElementById('modalDesc');
-      const modalFeatures = document.getElementById('modalFeatures');
-      const modalTags = document.getElementById('modalTags');
-      const modalLink = document.getElementById('modalLink');
-
-      function openProjectModal(key) {
-        const data = PROJECTS_DATA[key];
-        if (!data || !projectModal) return;
-
-        modalBadge.textContent = data.badge;
-        modalTitle.textContent = data.title;
-        modalDesc.textContent = data.description;
-        modalLink.href = data.link;
-
-        // Заполняем список особенностей
-        modalFeatures.innerHTML = '';
-        data.features.forEach((item) => {
-          const li = document.createElement('li');
-          li.className = 'flex items-start gap-2.5';
-          li.innerHTML = `
-            <span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>
-            <span>${item}</span>
-          `;
-          modalFeatures.appendChild(li);
-        });
-
-        // Заполняем теги
-        modalTags.innerHTML = '';
-        data.tags.forEach((tag) => {
-          const span = document.createElement('span');
-          span.className =
-            'px-3 py-1 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 border border-blue-100';
-          span.textContent = tag;
-          modalTags.appendChild(span);
-        });
-
-        projectModal.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeProjectModal() {
-        if (!projectModal) return;
-        projectModal.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-
-      document.querySelectorAll('[data-project]').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          openProjectModal(btn.getAttribute('data-project'));
-        });
-      });
-
-      if (closeModalBtn) closeModalBtn.addEventListener('click', closeProjectModal);
-      if (modalCloseSecondary) modalCloseSecondary.addEventListener('click', closeProjectModal);
-      if (projectModal) {
-        projectModal.addEventListener('click', (e) => {
-          if (e.target === projectModal) closeProjectModal();
-        });
-      }
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeProjectModal();
-      });
-
-      /* ===================================================================
-         7. КОПИРОВАНИЕ ССЫЛКИ И TOAST-УВЕДОМЛЕНИЕ
-         =================================================================== */
-      const toastEl = document.getElementById('toast');
-      const toastMsgEl = document.getElementById('toastMessage');
-      let toastTimer = null;
-
-      function showToast(message) {
-        if (!toastEl || !toastMsgEl) return;
-        toastMsgEl.textContent = message;
-        toastEl.classList.add('show');
-
-        if (toastTimer) clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-          toastEl.classList.remove('show');
-        }, 2800);
-      }
-
-      function copyTextToClipboard(text) {
+      /* =====================================================================
+         ЗАПУСК ПОСЛЕ ПОЛНОЙ ЗАГРУЗКИ ОКНА
+         ===================================================================== */
+      window.onload = function () {
         try {
-          const tempInput = document.createElement('textarea');
-          tempInput.value = text;
-          tempInput.setAttribute('readonly', '');
-          tempInput.style.position = 'fixed';
-          tempInput.style.top = '-9999px';
-          tempInput.style.left = '-9999px';
-          document.body.appendChild(tempInput);
-          tempInput.select();
-          tempInput.setSelectionRange(0, tempInput.value.length);
-          const copied = document.execCommand('copy');
-          document.body.removeChild(tempInput);
-
-          if (copied) {
-            showToast(`Ссылка ${text} скопирована!`);
-          } else {
-            showToast(`Адрес сайта: ${text}`);
-          }
+          initHeroCanvas();
+          initPixelGrid();
+          initOverlays();
+          initClipboard();
+          initScrollReveal();
         } catch (err) {
-          showToast(`Адрес сайта: ${text}`);
+          console.error('Ошибка инициализации портфолио TOOCHKA:', err);
         }
-      }
-
-      document.querySelectorAll('[data-copy-site]').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          copyTextToClipboard(SITE_URL);
-        });
-      });
+      };
     })();
   </script>
 </body>
